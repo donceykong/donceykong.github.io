@@ -90,9 +90,9 @@ p {
 }
 
 .button {
-  background-color: orange;
+  background-color: black;
   top: -120px;
-  border: none;
+  border: red;
   padding: 10px 10px;
   border-radius: 6px;
   text-align: center;
@@ -100,22 +100,24 @@ p {
   display: inline-block;
   font-size: 20px;
   font-weight: bold;
-  text-decoration: none;
+  text-decoration: none; 
+  box-shadow: 0 4px 16px 0 rgba(255,255,255,1), 0 2px 20px 0 rgba(0,0,0,0.19);
 }
 .button1 {
-  background-color: yellow;
+  background-color: black;
   top: -120px; left: 50px;
   border-radius: 6px;
-  box-shadow: 0 8px 16px 0 rgba(255,255,255,1), 0 6px 20px 0 rgba(0,0,0,0.19);
+  box-shadow: 0 4px 16px 0 rgba(255,255,255,1), 0 2px 20px 0 rgba(0,0,0,0.19);
 }
+
 .button2 {
-  background-color: magenta;
+  background-color: black;
   top: -120px; left: 200px;
   border-radius: 6px;
-  box-shadow: 0 8px 16px 0 rgba(255,255,255,1), 0 6px 20px 0 rgba(0,0,0,0.19);
+  box-shadow: 0 4px 16px 0 rgba(255,255,255,1), 0 2px 20px 0 rgba(0,0,0,0.19);
 }
-.button3 {background-color: teal; top: -120px; left: 290px; border-radius: 6px; box-shadow: 0 8px 16px 0 rgba(255,255,255,1), 0 6px 20px 0 rgba(0,0,0,0.19);} /* Gray */
-.button4 {background-color: grey; top: -120px; left: 560px; border-radius: 6px; box-shadow: 0 8px 16px 0 rgba(255,255,255,1), 0 6px 20px 0 rgba(0,0,0,0.19);} /* Black */
+.button3 {background-color: black; top: -120px; left: 290px; border-radius: 6px; box-shadow: 0 8px 16px 0 rgba(255,255,255,1), 0 2px 20px 0 rgba(0,0,0,0.19);} /* Gray */
+.button4 {background-color: black; top: -120px; left: 560px; border-radius: 6px; box-shadow: 0 8px 16px 0 rgba(255,255,255,1), 0 2px 20px 0 rgba(0,0,0,0.19);} /* Black */
 
 @media only screen and (max-width: 1000px) {
   h1 {
