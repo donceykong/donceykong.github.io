@@ -128,7 +128,6 @@ Feel free to add your own page(s) by sending a PR.
 <a href="https://shubhashisroydipta.com/" target="_blank">★</a>
 <a href="https://astanziola.github.io" target="_blank">★</a>
 <a href="https://tinkerer.in" target="_blank">★</a>
-<a href="https://sam-bieberich.github.io/" target="_blank">★</a>
 </td>
 </tr>
 <tr>
@@ -212,7 +211,7 @@ Want to learn more about Jekyll? Check out [this tutorial](https://www.taniarasc
 
 ## Installing
 
-For installation details please refer to [INSTALL.md](INSTALL.md).
+For instalation details please refer to [INSTALL.md](INSTALL.md).
 
 ## Customizing
 

@@ -2,11 +2,11 @@
   type: map
   contents:
     - name: Full Name
-      value: Albert Einstein
+      value: Doncey Albin
     - name: Date of Birth
-      value: 14th March 1879
+      value: 25th January 1994
     - name: Languages
-      value: English, German
+      value: English
 
 - title: Education
   type: time_table
