@@ -2,7 +2,7 @@
 layout: page
 title: Software Engineering
 description: 
-img: assets/projects/software_engineering.png
+img: assets/teaching/software_engineering.png
 importance: 3
 category: Spring 2024
 ---
