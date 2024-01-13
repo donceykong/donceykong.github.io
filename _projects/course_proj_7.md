@@ -1,7 +1,7 @@
 ---
 layout: page
 title: Google Voice Assistant (Object Oriented Design)
-description: a project with no image
+description:
 img: assets/projects/system_diagram.png
 importance: 4
 category: course projects

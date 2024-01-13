@@ -1,7 +1,7 @@
 ---
 layout: page
 title: Wall-Tracking Autonomous Robot
-description: a project with no image
+description:
 img:
 importance: 4
 category: course projects
@@ -17,3 +17,6 @@ The team I joined preferred to get our hands dirty with ROS and attempt the seco
 
 The robot we decided to use was the Amazon DeepRacer RC Car platform. This allowed us to circumvent many of the troubles that could have presented themselves if we decided to build the robot from scratch and focus more on the algorithic methods we learned during the course. 
 
+<div style="text-align: center;">
+    <iframe width="560" height="315" src="https://www.youtube.com/embed/maw_dp09HE4?si=YQyIg4oEOdX6QLzL" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+</div>

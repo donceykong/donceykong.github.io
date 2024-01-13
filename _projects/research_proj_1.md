@@ -1,7 +1,7 @@
 ---
 layout: page
 title: Semi-Autonomous UGV for Fire Detection, Tracking, and Elimination
-description: a project with a background image
+description:
 img: assets/projects/ugv1.png
 importance: 1
 category: research projects
