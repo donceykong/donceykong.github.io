@@ -54,7 +54,7 @@
       "startDate": "2021",
       "endDate": "2023",
       "score": "10",
-      "courses": ["Theory of Relativity"]
+      "courses": ["State Estimation, Reinforcement Learning, Advanced Robotics, Deep Learning"]
     },
     {
       "institution": "University of Colorado - Boulder",
@@ -65,7 +65,7 @@
       "startDate": "2021",
       "endDate": "",
       "score": "10",
-      "courses": ["Theory of Relativity"]
+      "courses": [""]
     },
     {
       "institution": "Colorado State University",
@@ -80,6 +80,13 @@
     }
   ],
   "awards": [
+    {
+      "title": "2022 Robotics Science and Systems (RSS) Inclusion Fellow",
+      "date": "2022-06-15",
+      "awarder": "Carnegie Mellon University (CMU)",
+      "url": "https://sites.google.com/andrew.cmu.edu/inclusion-rss-2022/participants",
+      "summary": "From the website - \"The primary goal of the 2022 Inclusion@RSS is to increase the number of new conference participants from groups traditionally underrepresented in robotics.\""
+    },
     {
       "title": "Top Senior Engineering Research Showcase Project",
       "date": "2021-05-15",
@@ -105,19 +112,19 @@
   //   }
   // ],
   "publications": [
+    // {
+    //   "name": "Zur Elektrody/namik bewegter Körper",
+    //   "publisher": "Annalen der Physik",
+    //   "releaseDate": "1905-06-30",
+    //   "url": "https://en.wikisource.org/wiki/Translation:On_the_Electrodynamics_of_Moving_Bodies",
+    //   "summary": "It concerned an interpretation of the Michelson–Morley experiment and the properties of light and time. Special relativity incorporates the principle that the speed of light is the same for all inertial observers regardless of the state of motion of the source."
+    // },
     {
-      "name": "Zur Elektrody/namik bewegter Körper",
-      "publisher": "Annalen der Physik",
-      "releaseDate": "1905-06-30",
-      "url": "https://en.wikisource.org/wiki/Translation:On_the_Electrodynamics_of_Moving_Bodies",
-      "summary": "It concerned an interpretation of the Michelson–Morley experiment and the properties of light and time. Special relativity incorporates the principle that the speed of light is the same for all inertial observers regardless of the state of motion of the source."
-    },
-    {
-      "name": "Über einen die Erzeugung und Verwandlung des Lichtes betreffenden heuristischen Gesichtspunkt",
-      "publisher": "Annalen der Physik",
-      "releaseDate": "1905-03-18",
-      "url": "https://de.wikisource.org/wiki/Über_einen_die_Erzeugung_und_Verwandlung_des_Lichtes_betreffenden_heuristischen_Gesichtspunkt",
-      "summary": "In the second paper, he applied the quantum theory to light to explain the photoelectric effect. In particular, he used the idea of light quanta (photons) to explain experimental results, but stressed the importance of the experimental results. The importance of his work on the photoelectric effect earned him the Nobel Prize in Physics in 1921."
+      "name": "Design, Implementation, and Evaluation of a Semi-Autonomous, Vision-based, Modular Unmanned Ground Vehicle Prototype",
+      "publisher": "Society for Imaging Science and Technology",
+      "releaseDate": "2021-01",
+      "url": "https://library.imaging.org/ei/articles/33/17/art00017",
+      "summary": "This paper presents the development of a prototype modular unmanned ground vehicle (UGV) used for fire detection and elimination. Taking a systems engineering approach, the mechatronics and control systems designs are performed first, then the system and the important subsystems are built and tested, and finally, the evaluation results are fed back for the next prototype iteration."
     }
   ],
   "skills": [
@@ -164,12 +171,12 @@
     {
       "name": "Christoffer Heckman",
       "icon": "fa-solid fa-laptop",
-      "reference": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam condimentum, diam quis convallis euismod, arcu mi ullamcorper lorem, a vestibulum nunc magna at sem. Sed in risus ac felis varius blandit. D"
+      "reference": "Christoffer (Chris) Heckman is my current PhD adivsor. His is the director of the Autonomous Robotics and Perception Group (ARPG) at CU Boulder."
     },
     {
       "name": "Steven Simske",
       "icon": "fa-solid fa-thumbtack",
-      "reference": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam condimentum, diam quis convallis euismod, arcu mi ullamcorper lorem, a vestibulum nunc magna at sem. Sed in risus ac felis varius blandit. D"
+      "reference": "Steven Simske was my undergraduate advisor and is a professor in the Department of Systems Engineering at Colorado State University."
     }
   ]
   // "projects": [
