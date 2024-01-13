@@ -25,6 +25,12 @@ I am a third-year PhD student in the Autonomous Robotics and Perception Group (A
 
 Outside of my work as a PhD student, I also have worked on many projects at home out of pure interest. This includes designing and 3D printing a 5-axis robotic arm, some experimentation with OpenCV's C++ API, and other random things. These all can be found in the 'home projects' section on the projects page.
 
-Other than my passion in robotics, I have major interests in art and skateboarding. I will likely add a tab for these interests in due time. 
+Other than my passion in robotics, I have major interests in art, skateboarding, and community. I will likely add a tab for these interests in due time. 
 
+Speaking of community, in 2017 I was selected to be the keynote speaker at the Denver Kids' Annual Breakfast Gala. This was a huge privledge and undertaking. Denver Kids made an incredible impact in my and my siblings' lives, so giving back to them in such a high-level manner was an honor. However, public speaking was new to me and doing it front of such a large crowd was intimidating. It took months for me to prepare for this speech, which I am happy I did, because in the end it all worked out. If you want to watch the speech, it can be viewed below. 
 
+<div style="text-align: center;">
+  <iframe width="560" height="315" src="https://www.youtube.com/embed/wJMUvAT-uEM?si=0i9kAq0BEWUBpi8z" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+</div>
+
+If you are interested in all of the amazing work DenverKids does, please check them out at:
