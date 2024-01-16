@@ -2,7 +2,7 @@
 layout: page
 title: Wall-Tracking Autonomous Robot
 description:
-img:
+img: assets/projects/wall_tracking_robot.png
 importance: 4
 category: course projects
 ---
