@@ -22,5 +22,5 @@ The robot we decided to use was the Amazon DeepRacer RC Car platform. This allow
 </div>
 
 <div style="display: flex; justify-content: center;">
-    {% include stlviewer.html src="test.stl" width=500 height=300 extrastyle="" %}
+    {% include stlviewer.html src="test.stl" width=300 height=300 extrastyle="" %}
 </div>
