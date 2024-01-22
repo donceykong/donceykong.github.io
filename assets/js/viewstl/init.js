@@ -1,0 +1,1 @@
+function initStlViewer(){$("div.3d-model").each(function(e,i){var n=$(i).data("src");console.log("Initing 3D File: "+n),new StlViewer(i,{models:[{filename:n}]})})}$().ready(initStlViewer);
