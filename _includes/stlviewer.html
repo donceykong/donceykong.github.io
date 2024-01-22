@@ -17,4 +17,8 @@ box-shadow: 3px 0px 10px 0px #000000;
 {% if include.extrastyle %}{{include.extrastyle}}{% endif %}
 {% endcapture %}
 
-<div class="3d-model col-12" data-src="{{url}}" style="{{style}}"></div>
+<!-- Below uses Bootstrap col-12 class, which instructs element to span full page width: -->
+<!-- div class="3d-model col-12" data-src="{{url}}" style="{{style}}"></div -->
+
+<!-- This works better: -->
+<div class="3d-model" data-src="{{url}}" style="{{style}}"></div>
