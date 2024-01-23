@@ -20,7 +20,3 @@ The robot we decided to use was the Amazon DeepRacer RC Car platform. This allow
 <div style="text-align: center;">
     <iframe width="560" height="315" src="https://www.youtube.com/embed/maw_dp09HE4?si=YQyIg4oEOdX6QLzL" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
 </div>
-
-<div style="display: flex; justify-content: center;">
-    {% include stlviewer.html src="test.stl" width=300 height=300 extrastyle="" %}
-</div>
