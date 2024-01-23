@@ -12,3 +12,9 @@ Anyone who has an undergraduate background in how engineering works in academia 
 Following the work I did during my NSF REU under the advice of Steven Simske, I decided to extend the work into a more realistic system: A household fire detection, tracking, and elimination robot. This was due to the fact that a wall-mounted system would not only be more practical than a UGV for indoor settings, but it would scale better, and most importantly, people already have smart fire detectors, so why not the ability to eliminate a detected fire?
 
 This was definitely a project that my advisor, my professor, and I were all intimitated by. It was a large project to complete in the course of a year, but it seemed too good to just let go of. 
+
+Below is the final assembly of the mechanism (STL). 
+
+<div style="display: flex; justify-content: center;">
+    {% include stlviewer.html src="household_fire_robot_assem.stl" width=300 height=300 extrastyle="" %}
+</div>
