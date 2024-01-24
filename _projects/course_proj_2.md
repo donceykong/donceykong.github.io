@@ -11,4 +11,6 @@ During my mechatronics course in undergrad, the students had to form teams to pr
 
 After the project was submitted, I sent in a video of me using the system to (DesignNews)[https://www.designnews.com/mechatronics/in-search-of-mechatronics-skills], but I never heard back. Maybe it was because I accidentally referenced "Design Magzine" in the video? Oops...
 
-<iframe width="560" height="315" src="https://www.youtube.com/embed/NOsXLit9jE8?si=FwF8K0lJktdiXOp0" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+<div style="text-align: center;">
+    <iframe width="560" height="315" src="https://www.youtube.com/embed/NOsXLit9jE8?si=FwF8K0lJktdiXOp0" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+</div>
