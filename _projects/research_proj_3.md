@@ -2,7 +2,7 @@
 layout: page
 title: Asynchronous Semantic SLAM
 description: 
-img: assets/projects/hunter.png
+img: assets/projects/async_sem_slam/hunter.png
 importance: 2
 category: research projects
 ---
