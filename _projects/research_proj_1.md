@@ -2,7 +2,7 @@
 layout: page
 title: Semi-Autonomous UGV for Fire Detection, Tracking, and Elimination
 description:
-img: assets/projects/ugv_fire_robot/ugv2.png
+img: assets/projects/ugv_fire_robot/ugv_trans.png
 importance: 1
 category: research projects
 ---
