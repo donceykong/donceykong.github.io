@@ -11,4 +11,6 @@ My most recent research was funded by a grant from Lockheed Martin. The goal was
 
 Due to the dynamic and unstructured nature of outdoor scenes, it was decided that this approach would be best benefitted by utilizing deep-learning methods for semantically understand the environment. 
 
-
+<div class="col-sm mt-3 mt-md-0">
+    {% include figure.liquid path="assets/projects/async_sem_slam/map_fast.gif" title="SLAM demonstration on CU campus" class="img-fluid rounded z-depth-1" %}
+</div>
