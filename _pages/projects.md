@@ -2,12 +2,14 @@
 layout: page
 title: Projects
 permalink: /projects/
-description: A collection of the various projects I have worked on. 
+description:
 nav: true
 nav_order: 3
 display_categories: [research projects, course projects, home projects]
 horizontal: false
 ---
+
+This is a collection of various robotics-based projects I have worked on. If you click a link below, you can find more details about each project. 
 
 <!-- pages/projects.md -->
 <div class="projects">
