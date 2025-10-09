@@ -78,5 +78,5 @@ The robot functions autonomously using a [behavior tree](https://en.wikipedia.or
 Below is the final assembly of the mechanism (STL). 
 
 <div style="display: flex; justify-content: center;">
-    {% include stlviewer.html src="/assets/stl/household_fire_robot_assem.stl" width=300 height=300 extrastyle="" %}
+    {% include stlviewer.html src="household_fire_robot_assem.stl" width=300 height=300 extrastyle="" %}
 </div>

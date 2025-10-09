@@ -43,6 +43,9 @@ collections:
   projects:
     output: true
     permalink: /projects/:path/
+  cv:
+    output: true
+    permalink: /cv/:path/
   teaching:
     output: true
     permalink: /teaching/:path/
