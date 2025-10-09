@@ -8,13 +8,11 @@ permalink: /
   <img src="{{ '/assets/img/prof_pic.jpg' | relative_url }}" alt="Doncey Albin" style="border-radius: 5px; height: 400px; object-fit: cover; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
 </div>
 
-Hey, I am Doncey and thanks for visting my website. Here you will find various robotics/software projects I have worked on, my CV, and classes I have assisted with teaching at the University of Colorado - Boulder. My hope is that this website will offer an enhanced display of my professional interests and capability than what a traditional CV could offer - maybe even some of my personality, too.
+Hey, my name is Doncey. I am a PhD canidate in the Autonomous Robotics and Perception Group (ARPG) at the University of Colorado Boulder, advised by professor Christoffer Heckman.
 
-I am a third-year PhD student in the Autonomous Robotics and Perception Group (ARPG) at the University of Colorado - Boulder. My work here has mostly been in perception and navigation. This includes using deep learning neural networks to semantically segment, complete, and bound objects in lidar point clouds and RGB-D images for improved envronmental understanding, using tools like GTSAM (LIO-SAM, FAST-LIO) for SLAM, and integrating these tools within the ROS/ROS2 frameworks for deployment. All of my work has been deployed on a real robot to work in near real-time conditions. I have done a few grad course projects that are related to robotics as well, which can be found in the 'course projects' section on the projects page.
+My research has primarily focused on perception and navigation, and more recently, with an emphasis on multi-robot mapping and navigation. I'm passionate about real-world robotics, so I prioritize projects that are validated on physical systems, despite the frustrating bottlenecks that often arise when doing so.
 
-Outside of my work as a PhD student, I also have worked on many projects at home out of pure interest. This includes designing and 3D printing a 5-axis robotic arm, some experimentation with OpenCV's C++ API, and other random things. These all can be found in the 'home projects' section on the projects page.
-
-Other than my passion in robotics, I have major interests in art, skateboarding, and community. I will likely add a tab for these interests in due time. 
+Outside of my work as a PhD student, I also like to work projects at home when I can find the time. Some examples of these can be found on the projects page. Beyond my passion in robotics, I have major interests in art, skateboarding, and community. I will likely add a tab for these interests in due time. 
 
 ## Community
 
