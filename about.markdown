@@ -1,8 +1,12 @@
 ---
 layout: page
-title: About
+title:
 permalink: /
 ---
+
+<div style="text-align: center; margin-bottom: 2rem;">
+  <img src="{{ '/assets/img/prof_pic.jpg' | relative_url }}" alt="Doncey Albin" style="border-radius: 5px; height: 400px; object-fit: cover; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
+</div>
 
 Hey, I am Doncey and thanks for visting my website. Here you will find various robotics/software projects I have worked on, my CV, and classes I have assisted with teaching at the University of Colorado - Boulder. My hope is that this website will offer an enhanced display of my professional interests and capability than what a traditional CV could offer - maybe even some of my personality, too.
 
@@ -16,8 +20,8 @@ Other than my passion in robotics, I have major interests in art, skateboarding,
 
 In 2017 I was selected to be the keynote speaker at the Denver Kids' Annual Breakfast Gala. Denver Kids has a mission to ensure every student in Denver graduates and the counselors that work there truly make it happen. This opportunity to be a keynote speaker was a huge privledge and undertaking. Denver Kids made an incredible impact in my and my siblings' lives, so giving back to them in such a high-level manner was an honor. However, public speaking was new to me and doing it front of such a large crowd was intimidating. It took months for me to prepare for this speech, which I am happy I did, because in the end it all worked out. If you want to watch the speech, it can be viewed below. 
 
-<div style="text-align: center;">
-  <iframe width="560" height="315" src="https://www.youtube.com/embed/wJMUvAT-uEM?si=0i9kAq0BEWUBpi8z" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+<div style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; max-width: 100%; margin: 2rem auto;">
+  <iframe style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;" src="https://www.youtube.com/embed/wJMUvAT-uEM?si=0i9kAq0BEWUBpi8z" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
 </div>
 
 If you are interested in all of the amazing work Denver Kids does, please [check them out here](https://www.denverkids.org/about-us).

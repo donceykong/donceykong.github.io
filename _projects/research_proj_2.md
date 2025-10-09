@@ -24,8 +24,15 @@ There was continuous integration testing that I needed to do during the developm
 
 ## Final Product
 
-<div style="display: flex; justify-content: center;">
-<iframe width="315" height="560" src="https://www.youtube.com/embed/2oVTqzw8dh8" title="FirePutOut" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+<div style="text-align: center; margin: 2rem 0;">
+  <iframe width="315" height="560" 
+          src="https://www.youtube.com/embed/2oVTqzw8dh8" 
+          title="FirePutOut" 
+          frameborder="0" 
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
+          allowfullscreen
+          style="max-width: 100%; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
+  </iframe>
 </div>
 
 <br>
@@ -71,5 +78,5 @@ The robot functions autonomously using a [behavior tree](https://en.wikipedia.or
 Below is the final assembly of the mechanism (STL). 
 
 <div style="display: flex; justify-content: center;">
-    {% include stlviewer.html src="household_fire_robot_assem.stl" width=300 height=300 extrastyle="" %}
+    {% include stlviewer.html src="/assets/stl/household_fire_robot_assem.stl" width=300 height=300 extrastyle="" %}
 </div>
