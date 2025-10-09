@@ -41,12 +41,12 @@ permalink: /cv/
 
 <div class="cv-container">
   <div class="cv-download">
-    <a href="{{ '/assets/pdf/donceyalbin_cv_2024.pdf' | relative_url }}" download>
+    <a href="{{ '/assets/pdf/DA_2025_CV.pdf' | relative_url }}" download>
       ⬇ Download PDF
     </a>
   </div>
 
-  <iframe src="{{ '/assets/pdf/donceyalbin_cv_2024.pdf' | relative_url }}" 
+  <iframe src="{{ '/assets/pdf/DA_2025_CV.pdf' | relative_url }}" 
           class="cv-embed"
           title="Doncey Albin CV">
   </iframe>
