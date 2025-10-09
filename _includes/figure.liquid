@@ -1,0 +1,12 @@
+<figure>
+  <img src="{{ include.path | relative_url }}" 
+       class="img-fluid rounded z-depth-1" 
+       {% if include.width %}width="{{ include.width }}"{% endif %}
+       {% if include.height %}height="{{ include.height }}"{% endif %}
+       alt="{{ include.title }}" 
+       title="{{ include.title }}" />
+  {% if include.caption %}
+  <figcaption class="caption">{{ include.caption }}</figcaption>
+  {% endif %}
+</figure>
+

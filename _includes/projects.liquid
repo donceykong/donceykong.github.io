@@ -1,0 +1,16 @@
+<div class="project-card">
+  {% if project.img %}
+  <div class="project-img">
+    <img src="{{ project.img | relative_url }}" alt="{{ project.title }}">
+  </div>
+  {% endif %}
+  <div class="project-content">
+    <h3>
+      <a href="{{ project.url | relative_url }}">{{ project.title }}</a>
+    </h3>
+    {% if project.description %}
+    <p>{{ project.description }}</p>
+    {% endif %}
+  </div>
+</div>
+
