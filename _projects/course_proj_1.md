@@ -1,6 +1,6 @@
 ---
 layout: page
-title: BERUIT (Robtic Beer Pong)
+title: BERUIT (Robotic Beer Pong)
 description:
 img: assets/projects/beruit.png
 importance: 3
