@@ -4,7 +4,7 @@ title: Projects
 permalink: /pages/projects/
 nav: true
 nav_order: 3
-display_categories: [research projects, course projects, home projects]
+display_categories: [research projects, course projects]
 horizontal: false
 ---
 
