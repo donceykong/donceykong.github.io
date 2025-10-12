@@ -8,9 +8,7 @@ permalink: /
   <img src="{{ '/assets/img/prof_pic.jpg' | relative_url }}" alt="Doncey Albin" style="border-radius: 5px; height: 400px; object-fit: cover; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
 </div>
 
-Hey, my name is Doncey. I am a PhD canidate in the Autonomous Robotics and Perception Group (ARPG) at the University of Colorado Boulder, advised by professor Christoffer Heckman.
-
-My research has primarily focused on perception and navigation, and more recently, with an emphasis on multi-robot mapping and navigation. I'm passionate about real-world robotics, so I prioritize projects that are validated on physical systems, despite the frustrating bottlenecks that often arise when doing so.
+I am a PhD canidate in the Autonomous Robotics and Perception Group (ARPG) at the University of Colorado Boulder, advised by professor Christoffer Heckman. My research has primarily focused on perception and navigation, and more recently, with an emphasis on multi-robot mapping and navigation. I'm passionate about real-world robotics, so I prioritize projects that are validated on physical systems, despite the frustrating bottlenecks that often arise when doing so.
 
 Outside of my work as a PhD student, I also like to work projects at home when I can find the time. Some examples of these can be found on the projects page. Beyond my passion in robotics, I have major interests in art, skateboarding, and community. I will likely add a tab for these interests in due time. 
 
