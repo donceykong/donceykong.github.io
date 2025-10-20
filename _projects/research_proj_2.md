@@ -3,7 +3,7 @@ layout: page
 title: Household Fire Detecting, Tracking, and Extinguishing Robot
 description:
 img: assets/projects//household_fire_robot/robot.gif
-importance: 2
+importance: 3
 category: research projects
 ---
 
