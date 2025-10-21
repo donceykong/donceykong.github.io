@@ -3,8 +3,8 @@ layout: page
 title: Household Fire Detecting, Tracking, and Extinguishing Robot
 description:
 img: assets/projects//household_fire_robot/robot.gif
-importance: 3
-category: research projects
+# importance: 3
+# category: research projects
 ---
 
 Anyone who has an undergraduate background in how engineering works in academia is familiar with an engineering capstone project. These are the projects that eventually are displayed at each university's Engineer Days (E-Days) celebration. At CSU, a new program was established that focused on preparing undergraduate students to apply for and pursue a PhD. This program had a similar senior design captone project, named the engineering research capstone project. 

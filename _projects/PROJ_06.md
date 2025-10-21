@@ -3,8 +3,8 @@ layout: page
 title: AMR Hardware Integration
 description: 
 img: assets/projects/huntie_rebuild/huntie_cage.png
-importance: 2
-category: research projects
+# importance: 2
+# category: research projects
 ---
 
 During my research I had the oportunity to utilize multiple robotics platforms for experimental validation. This included a Boston Dynamics Spot platform, a Clearpath Robotics Husky, and an AgileX HunterSE 2.0 platform. The HunterSE platform was purchased around the time I began my PhD, so I was able to work on integrating compute and sensors onto it. While I had entered the PhD with mechatronics and some system integration experience, there were a lot of challenges I faced while attempting to build a backpack for the HunterSE platform. For one, it was my first time working with precision sensor components, and two, I had to factor in environmental conditions we may face in the field into the design.

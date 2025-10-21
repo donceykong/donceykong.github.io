@@ -3,8 +3,8 @@ layout: page
 title: BERUIT (Robotic Beer Pong)
 description:
 img: assets/projects/beruit.png
-importance: 3
-category: course projects
+# importance: 3
+# category: course projects
 ---
 
 During my mechatronics course in undergrad, the students had to form teams to produce a project by the end of the semester. The team I joined decided that we wanted something much different than previous semester submissions and something that might win the hearts of the students: automated beer pong. We made the decision to name the project Beruit, since involving references to alcohol in a university project probably would not have sat right with the professor. 

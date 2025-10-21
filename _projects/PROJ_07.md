@@ -3,8 +3,8 @@ layout: page
 title: CU-Multi Dataset
 description: 
 img: assets/projects/cu_multi/main_image.png
-importance: 1
-category: research projects
+# importance: 1
+# category: research projects
 ---
 
 ## Overview

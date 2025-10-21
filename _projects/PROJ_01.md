@@ -3,8 +3,8 @@ layout: page
 title: Wall-Tracking Autonomous Robot
 description:
 img: assets/projects/wall_tracking_robot.png
-importance: 4
-category: course projects
+# importance: 4
+# category: course projects
 ---
 
 This was the semester project for the Advanced Robotics graduate course at CU. There were two options for a final projects: 

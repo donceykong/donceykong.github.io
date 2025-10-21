@@ -3,8 +3,8 @@ layout: page
 title: BRAR Bipedal Robotic Arm Runner
 description: 
 img: assets/projects/brar_rrt_fpv.gif
-importance: 4
-category: course projects
+# importance: 4
+# category: course projects
 ---
 
 In 2023, I decided to learn a little more about computer graphics as well as take a crack at making a game that allowed users to dive deeper on robotics concepts. My initial thinking was that many games already utilize many concepts in robotic perception and navigation, but the algorithms are often not visualized. At the time, I didnt realize how difficult it would be to make such a game in OpenGL and entirely written in C. 
