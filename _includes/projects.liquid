@@ -1,16 +1,18 @@
-<div class="project-card">
-  {% if project.img %}
-  <div class="project-img">
-    <img src="{{ project.img | relative_url }}" alt="{{ project.title }}">
+{%- comment -%}
+  Card for a project or teaching entry.
+  Usage: {% include projects.liquid project=item featured=true %}
+{%- endcomment -%}
+{%- assign item = include.project | default: project -%}
+<div class="card{% if include.featured %} card--featured{% endif %}">
+  {%- assign card_img = item.card_img | default: item.img -%}
+  {%- if card_img %}
+  <div class="card__media{% if item.img_fit == 'contain' and item.card_img == nil %} card__media--contain{% endif %}">
+    <img src="{{ card_img | relative_url }}" alt="" loading="lazy">
   </div>
-  {% endif %}
-  <div class="project-content">
-    <h3>
-      <a href="{{ project.url | relative_url }}">{{ project.title }}</a>
-    </h3>
-    {% if project.description %}
-    <p>{{ project.description }}</p>
-    {% endif %}
+  {%- endif %}
+  <div class="card__body">
+    {%- if item.category %}<div class="card__meta">{{ item.category }}</div>{% endif %}
+    <h3 class="card__title"><a href="{{ item.url | relative_url }}">{{ item.title }}</a></h3>
+    {%- if item.description %}<p class="card__desc">{{ item.description }}</p>{% endif %}
   </div>
 </div>
-

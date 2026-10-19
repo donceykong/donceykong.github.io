@@ -1,10 +1,10 @@
 ---
-layout: page
+layout: project
 title: Household Fire Detecting, Tracking, and Extinguishing Robot
-description:
+description: A wall-mounted pan-tilt robot that finds fires with a thermal camera, confirms them with a neural net, and sprays water.
 img: assets/projects//household_fire_robot/robot.gif
+category: Research · Capstone, CSU
 # importance: 3
-# category: research projects
 ---
 
 Anyone who has an undergraduate background in how engineering works in academia is familiar with an engineering capstone project. These are the projects that eventually are displayed at each university's Engineer Days (E-Days) celebration. At CSU, a new program was established that focused on preparing undergraduate students to apply for and pursue a PhD. This program had a similar senior design captone project, named the engineering research capstone project. 
@@ -19,24 +19,11 @@ On the techincal side, I gained a lot more experience in mechanical design, addi
 
 There was continuous integration testing that I needed to do during the development of the system. Each time there were major mechanical, electrical, or software changes, I made sure to test the components of the system to ensure functionality was not altered. The effort to do this was worth it. I had some hard lessons during previous project development, where I had to hunt down a root failure without knowing which change could have led to it. 
 
-<br>
-
-
 ## Final Product
 
-<div style="text-align: center; margin: 2rem 0;">
-  <iframe width="315" height="560" 
-          src="https://www.youtube.com/embed/2oVTqzw8dh8" 
-          title="FirePutOut" 
-          frameborder="0" 
-          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
-          allowfullscreen
-          style="max-width: 100%; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
-  </iframe>
+<div class="embed embed--portrait">
+  <iframe src="https://www.youtube.com/embed/2oVTqzw8dh8" title="FirePutOut" loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
 </div>
-
-<br>
-
 
 ## Controller
 
@@ -62,16 +49,13 @@ The robot functions autonomously using a [behavior tree](https://en.wikipedia.or
 
 10) Return to pan-tilt mode.
 
-<br>
-
-
 ## Pan-tilt Mechanism Design
 
-<video width="800" height="300" autoplay loop>
+<video autoplay loop muted playsinline>
     <source src="/assets/projects/household_fire_robot/Assem1.mp4" type="video/mp4">
 </video>
 
-<video width="800" height="300" autoplay loop>
+<video autoplay loop muted playsinline>
     <source src="/assets/projects/household_fire_robot/System_Assembly.mp4" type="video/mp4">
 </video>
 

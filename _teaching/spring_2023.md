@@ -1,7 +1,7 @@
 ---
-layout: page
+layout: project
 title: Algorithms
-description:
+description: "My first TA role in Computer Science: an upper-level undergraduate algorithms course."
 img: assets/teaching/algorithms.png
 importance: 3
 category: Spring 2023

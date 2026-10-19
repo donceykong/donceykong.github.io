@@ -1,10 +1,10 @@
 ---
-layout: page
+layout: project
 title: BRAR Bipedal Robotic Arm Runner
-description: 
+description: A game written in C and OpenGL for exploring robotics concepts like transform trees, planning, and control.
 img: assets/projects/brar_rrt_fpv.gif
+category: Personal project
 # importance: 4
-# category: course projects
 ---
 
 In 2023, I decided to learn a little more about computer graphics as well as take a crack at making a game that allowed users to dive deeper on robotics concepts. My initial thinking was that many games already utilize many concepts in robotic perception and navigation, but the algorithms are often not visualized. At the time, I didnt realize how difficult it would be to make such a game in OpenGL and entirely written in C. 

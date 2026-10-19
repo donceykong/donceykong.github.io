@@ -1,0 +1,33 @@
+---
+layout: default
+---
+{%- if page.collection == "teaching" -%}
+  {%- assign back_url = '/pages/teaching/' -%}{%- assign back_label = 'Teaching' -%}
+{%- else -%}
+  {%- assign back_url = '/pages/projects/' -%}{%- assign back_label = 'Projects' -%}
+{%- endif -%}
+<article class="container page project">
+  <header class="page-header">
+    <a class="back-link" href="{{ back_url | relative_url }}">← {{ back_label }}</a>
+    {%- if page.category %}<p class="eyebrow">{{ page.category }}</p>{% endif %}
+    <h1>{{ page.title | escape }}</h1>
+    {%- if page.description %}<p class="lede">{{ page.description }}</p>{% endif -%}
+    {%- if page.links %}
+    <div class="button-row">
+      {%- for link in page.links %}
+      <a class="btn{% if forloop.first %} btn--primary{% endif %}" href="{{ link.url }}">{{ link.label }}</a>
+      {%- endfor %}
+    </div>
+    {%- endif %}
+  </header>
+
+  {%- if page.img and page.hero != false %}
+  <figure class="project-hero{% if page.img_fit == 'contain' %} project-hero--contain{% endif %}">
+    <img src="{{ page.img | relative_url }}" alt="{{ page.title | escape }}">
+  </figure>
+  {%- endif %}
+
+  <div class="prose">
+    {{ content }}
+  </div>
+</article>

@@ -1,10 +1,10 @@
 ---
-layout: page
+layout: project
 title: Wall-Tracking Autonomous Robot
-description:
+description: 2D SLAM and wall-following control on an Amazon DeepRacer, run laps around the CU Engineering Center basement.
 img: assets/projects/wall_tracking_robot.png
+category: Course project · Advanced Robotics
 # importance: 4
-# category: course projects
 ---
 
 This was the semester project for the Advanced Robotics graduate course at CU. There were two options for a final projects: 
@@ -17,6 +17,6 @@ The team I joined preferred to get our hands dirty with ROS and attempt the seco
 
 The robot we decided to use was the Amazon DeepRacer RC Car platform. This allowed us to circumvent many of the troubles that could have presented themselves if we decided to build the robot from scratch and focus more on the algorithic methods we learned during the course. 
 
-<div style="text-align: center;">
-    <iframe width="560" height="315" src="https://www.youtube.com/embed/maw_dp09HE4?si=YQyIg4oEOdX6QLzL" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+<div class="embed">
+  <iframe src="https://www.youtube.com/embed/maw_dp09HE4?si=YQyIg4oEOdX6QLzL" title="YouTube video player" loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
 </div>

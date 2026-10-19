@@ -1,0 +1,17 @@
+{%- assign path = page.url -%}
+<header class="site-header">
+  <div class="container site-header__inner">
+    <a class="site-title" href="{{ '/' | relative_url }}">{{ site.title | escape }}</a>
+
+    <nav class="site-nav" aria-label="Main">
+      <a href="{{ '/' | relative_url }}" {% if path == '/' %}aria-current="page"{% endif %}>About</a>
+      <a href="{{ '/pages/projects/' | relative_url }}" {% if path contains '/projects/' %}aria-current="page"{% endif %}>Projects</a>
+      <a href="{{ '/pages/teaching/' | relative_url }}" {% if path contains '/teaching/' %}aria-current="page"{% endif %}>Teaching</a>
+      <a href="{{ '/cv/' | relative_url }}" {% if path == '/cv/' %}aria-current="page"{% endif %}>CV</a>
+      <button class="theme-toggle" type="button" aria-label="Toggle dark mode" title="Toggle dark mode">
+        <svg class="icon-moon" viewBox="0 0 24 24" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg>
+        <svg class="icon-sun" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4.5"/><path d="M12 1.5v3M12 19.5v3M4.2 4.2l2.1 2.1M17.7 17.7l2.1 2.1M1.5 12h3M19.5 12h3M4.2 19.8l2.1-2.1M17.7 6.3l2.1-2.1"/></svg>
+      </button>
+    </nav>
+  </div>
+</header>

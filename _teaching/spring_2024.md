@@ -1,7 +1,7 @@
 ---
-layout: page
+layout: project
 title: Software Engineering
-description: 
+description: "My first graduate-level TA role: the software development lifecycle, git, services, and concurrent programming."
 img: assets/teaching/software_engineering.png
 importance: 3
 category: Spring 2024

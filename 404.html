@@ -1,25 +1,14 @@
 ---
 permalink: /404.html
-layout: page
+layout: default
 ---
 
-<style type="text/css" media="screen">
-  .container {
-    margin: 10px auto;
-    max-width: 600px;
-    text-align: center;
-  }
-  h1 {
-    margin: 30px 0;
-    font-size: 4em;
-    line-height: 1;
-    letter-spacing: -1px;
-  }
-</style>
-
-<div class="container">
-  <h1>404</h1>
-
-  <p><strong>Page not found :(</strong></p>
-  <p>The requested page could not be found.</p>
+<div class="container page" style="text-align: center; padding-top: 6rem;">
+  <p class="eyebrow">404</p>
+  <h1>Page not found</h1>
+  <p class="lede">The page you're looking for doesn't exist or has moved.</p>
+  <div class="button-row" style="justify-content: center;">
+    <a class="btn btn--primary" href="{{ '/' | relative_url }}">Back home</a>
+    <a class="btn" href="{{ '/pages/projects/' | relative_url }}">Projects</a>
+  </div>
 </div>

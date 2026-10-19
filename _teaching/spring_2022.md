@@ -1,7 +1,7 @@
 ---
-layout: page
+layout: project
 title: Dynamics
-description:
+description: "Graded homework, led recitations, and instructed in one of my favorite subjects."
 img: assets/teaching/dynamics.png
 importance: 3
 category: Spring 2022
