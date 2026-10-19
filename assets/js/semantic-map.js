@@ -40,6 +40,12 @@
 
   function rgb(c) { return "rgb(" + c.join(",") + ")"; }
 
+  // Show the reason on screen too; there is no console on a phone.
+  function fail(status, what, err) {
+    status.textContent = "Couldn't load " + what + (err && err.message ? " (" + err.message + ")" : "") + ".";
+    console.error(err);
+  }
+
   function init(root) {
     var status = root.querySelector(".semantic-map__status");
     if (!window.WebGLRenderingContext || !window.THREE) {
@@ -49,15 +55,14 @@
     fetch(root.dataset.manifest)
       .then(function (r) { return r.json(); })
       .then(function (manifest) { build(root, manifest); })
-      .catch(function (err) {
-        status.textContent = "Couldn't load the map.";
-        console.error(err);
-      });
+      .catch(function (err) { fail(status, "the map", err); });
   }
 
   function build(root, manifest) {
     var THREE = window.THREE;
     var base = root.dataset.base || "";
+    // Versioned URLs so a new deploy never mixes with cached data files.
+    var version = root.dataset.version ? "?v=" + root.dataset.version : "";
     var scale = manifest.scale_m;
     var stage = root.querySelector(".semantic-map__stage");
     var status = root.querySelector(".semantic-map__status");
@@ -117,7 +122,7 @@
     var cache = {};
     function loadMap(id) {
       if (cache[id]) return cache[id];
-      cache[id] = fetchBuffer(base + datasets[id].map).then(function (buf) {
+      cache[id] = fetchBuffer(base + datasets[id].map + version).then(function (buf) {
         var map = decode(buf, scale, "labels");
         var zMin = Infinity, zMax = -Infinity;
         for (var i = 2; i < map.xyz.length; i += 3) {
@@ -145,7 +150,7 @@
 
     function loadTracks() {
       return Promise.all(robotSets.map(function (d) {
-        return fetchBuffer(base + d.traj).then(function (buf) {
+        return fetchBuffer(base + d.traj + version).then(function (buf) {
           var tr = decode(buf, scale, "times");
           var color = new THREE.Color(rgb(d.color));
           var g = new THREE.BufferGeometry();
@@ -346,8 +351,7 @@
         status.textContent = "";
       }).catch(function (err) {
         clearTimeout(slow);
-        status.textContent = "Couldn't load " + d.name + ".";
-        console.error(err);
+        fail(status, d.name, err);
       });
     }
 
@@ -394,10 +398,7 @@
       select(defaultId);
       requestAnimationFrame(tick);
       root.classList.add("is-ready");
-    }).catch(function (err) {
-      status.textContent = "Couldn't load the map.";
-      console.error(err);
-    });
+    }).catch(function (err) { fail(status, "the map", err); });
   }
 
   function boot() {

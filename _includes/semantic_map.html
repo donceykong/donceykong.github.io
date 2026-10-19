@@ -6,8 +6,9 @@
 {% endcomment %}
 {%- assign dir = include.dir | relative_url -%}
 <figure class="semantic-map breakout"
-        data-manifest="{{ dir }}{{ include.env }}_map.json"
+        data-manifest="{{ dir }}{{ include.env }}_map.json?v={{ site.time | date: '%s' }}"
         data-base="{{ dir }}"
+        data-version="{{ site.time | date: '%s' }}"
         data-default="{{ include.default | default: 'all' }}">
   <div class="semantic-map__stage">
     <img class="semantic-map__poster" src="{{ dir }}{{ include.env }}_all_thumb.png" alt="Top-down semantic map preview" loading="lazy">
@@ -27,4 +28,4 @@
 
 <script src="https://cdn.jsdelivr.net/gh/mrdoob/three.js@r128/build/three.min.js"></script>
 <script src="https://cdn.jsdelivr.net/gh/mrdoob/three.js@r128/examples/js/controls/OrbitControls.js"></script>
-<script src="{{ '/assets/js/semantic-map.js' | relative_url }}"></script>
+<script src="{{ '/assets/js/semantic-map.js' | relative_url }}?v={{ site.time | date: '%s' }}"></script>
