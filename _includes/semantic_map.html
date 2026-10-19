@@ -1,20 +1,24 @@
 {% comment %}
-  Interactive semantic map viewer with a robot selector.
-  Usage: {% include semantic_map.html dir="assets/projects/cu_multi/" env="main_campus" default="all" title="..." caption="..." %}
-  Expects <dir><env>_map.json (manifest), the map/trajectory files it lists, and
-  <dir><env>_all_thumb.png (see _scripts/make_cu_multi_map.py).
+  Interactive semantic map viewer with environment, robot and colour-mode selectors.
+  Usage:
+    {% include semantic_map.html dir="assets/projects/cu_multi/voxel_0.5m/"
+       envs="main_campus:Main Campus,kittredge_loop:Kittredge Loop" default="all" caption="..." %}
+  Expects <dir><env>_map.json (manifest) per environment, the map/trajectory files it
+  lists, and <dir><first env>_all_thumb.png (see _scripts/make_cu_multi_map.py).
 {% endcomment %}
 {%- assign dir = include.dir | relative_url -%}
+{%- assign first_env = include.envs | split: ',' | first | split: ':' | first -%}
+{%- assign version = site.time | date: '%s' -%}
 <figure class="semantic-map breakout"
-        data-manifest="{{ dir }}{{ include.env }}_map.json?v={{ site.time | date: '%s' }}"
+        data-envs="{{ include.envs }}"
         data-base="{{ dir }}"
-        data-version="{{ site.time | date: '%s' }}"
+        data-version="{{ version }}"
         data-default="{{ include.default | default: 'all' }}">
   <div class="semantic-map__stage">
-    <img class="semantic-map__poster" src="{{ dir }}{{ include.env }}_all_thumb.png" alt="Top-down semantic map preview" loading="lazy">
+    <img class="semantic-map__poster" src="{{ dir }}{{ first_env }}_all_thumb.png" alt="Top-down semantic map preview" loading="lazy">
     <div class="semantic-map__hud">
-      <div>
-        {% if include.title %}<div class="semantic-map__title">{{ include.title }}</div>{% endif %}
+      <div class="semantic-map__info">
+        <div class="semantic-map__envs semantic-map__group" role="group" aria-label="Environment"></div>
         <div class="semantic-map__stats"></div>
       </div>
       <div class="semantic-map__toolbar" role="toolbar" aria-label="Map view controls"></div>
@@ -28,4 +32,4 @@
 
 <script src="https://cdn.jsdelivr.net/gh/mrdoob/three.js@r128/build/three.min.js"></script>
 <script src="https://cdn.jsdelivr.net/gh/mrdoob/three.js@r128/examples/js/controls/OrbitControls.js"></script>
-<script src="{{ '/assets/js/semantic-map.js' | relative_url }}?v={{ site.time | date: '%s' }}"></script>
+<script src="{{ '/assets/js/semantic-map.js' | relative_url }}?v={{ version }}"></script>

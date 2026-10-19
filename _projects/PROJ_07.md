@@ -14,10 +14,9 @@ links:
 
 {% include semantic_map.html
    dir="assets/projects/cu_multi/voxel_0.5m/"
-   env="main_campus"
+   envs="main_campus:Main Campus,kittredge_loop:Kittredge Loop"
    default="all"
-   title="Main Campus"
-   caption="Semantic LiDAR maps from the four robots on Main Campus. Pick one robot or all of them. Scans are taken every 10 m along each ground-truth trajectory, downsampled to 0.5 m voxels, then merged and downsampled to 0.5 m again. The axes show each lidar's pose (x red, y green, z blue), replayed in sync about 60× faster than real time. Click a class to hide it." %}
+   caption="Semantic LiDAR maps from the four robots at both CU-Multi sites. Switch between Main Campus and Kittredge Loop, pick one robot or all of them, and colour points by semantic class or by the robot that observed them. Scans are taken every 10 m along each ground-truth trajectory, downsampled to 0.5 m voxels, then merged and downsampled to 0.5 m again. The axes show each lidar's pose (x red, y green, z blue), replayed in sync about 60× faster than real time. Click a class to hide it." %}
 
 ## Overview
 

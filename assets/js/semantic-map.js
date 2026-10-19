@@ -1,6 +1,8 @@
 // Interactive semantic point-cloud viewer (three.js r128, global build).
-// Markup: <figure class="semantic-map" data-manifest="...json" data-base="dir/" data-default="all">
-// The manifest (see _scripts/make_cu_multi_map.py) lists one dataset per robot plus "all".
+// Markup: <figure class="semantic-map" data-envs="main_campus:Main Campus,kittredge_loop:Kittredge Loop"
+//                 data-base="dir/" data-version="123" data-default="all">
+// Each environment has a manifest <dir><env>_map.json (see _scripts/make_cu_multi_map.py)
+// listing one dataset per robot plus "all".
 (function () {
   "use strict";
 
@@ -13,16 +15,26 @@
     });
   }
 
-  // uint32 N | int16 xyz[3N] | uint8 label[N]  (map)
-  // uint32 N | int16 xyz[3N] | float32 t[N] | float32 quat[4N]  (trajectory)
-  function decode(buf, scale, tail) {
+  function fetchJSON(url) {
+    return fetch(url).then(function (r) {
+      if (!r.ok) throw new Error(url + ": " + r.status);
+      return r.json();
+    });
+  }
+
+  // uint32 N | int16 xyz[3N] | uint8 label[N] [| uint8 robot[N]]      (map)
+  // uint32 N | int16 xyz[3N] | float32 t[N] | float32 quat[4N]        (trajectory)
+  function decode(buf, scale, tail, withRobots) {
     var n = new Uint32Array(buf, 0, 1)[0];
     var q = new Int16Array(buf, 4, n * 3);
     var xyz = new Float32Array(n * 3);
     for (var i = 0; i < xyz.length; i++) xyz[i] = q[i] * scale;
     var off = 4 + n * 6;
     var out = { n: n, xyz: xyz };
-    if (tail === "labels") out.labels = new Uint8Array(buf, off, n);
+    if (tail === "labels") {
+      out.labels = new Uint8Array(buf, off, n);
+      if (withRobots) out.robots = new Uint8Array(buf, off + n, n);
+    }
     // float32 needs 4-byte alignment, so copy the tail out.
     if (tail === "times") {
       out.t = new Float32Array(buf.slice(off, off + n * 4));
@@ -52,25 +64,25 @@
       status.textContent = "Interactive view needs WebGL.";
       return;
     }
-    fetch(root.dataset.manifest)
-      .then(function (r) { return r.json(); })
-      .then(function (manifest) { build(root, manifest); })
-      .catch(function (err) { fail(status, "the map", err); });
+    try {
+      build(root);
+    } catch (err) {
+      fail(status, "the map", err);
+    }
   }
 
-  function build(root, manifest) {
+  function build(root) {
     var THREE = window.THREE;
     var base = root.dataset.base || "";
     // Versioned URLs so a new deploy never mixes with cached data files.
     var version = root.dataset.version ? "?v=" + root.dataset.version : "";
-    var scale = manifest.scale_m;
+    var envList = (root.dataset.envs || "").split(",").map(function (s) {
+      var parts = s.split(":");
+      return { id: parts[0].trim(), name: (parts[1] || parts[0]).trim() };
+    }).filter(function (e) { return e.id; });
     var stage = root.querySelector(".semantic-map__stage");
     var status = root.querySelector(".semantic-map__status");
     var reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-
-    var datasets = {};
-    manifest.datasets.forEach(function (d) { datasets[d.id] = d; });
-    var robotSets = manifest.datasets.filter(function (d) { return d.traj; });
 
     // ── Scene ────────────────────────────────────────────────────────────────
     var renderer = new THREE.WebGLRenderer({ antialias: true });
@@ -93,39 +105,61 @@
     controls.autoRotate = !reduceMotion;
     controls.autoRotateSpeed = 0.35;
 
-    // Points slightly larger than the voxel spacing so surfaces read as solid.
-    var pointSize = 1.1 * (manifest.map_voxel_m || 1);
-    var material = new THREE.PointsMaterial({ size: pointSize, vertexColors: true, sizeAttenuation: true });
+    var material = new THREE.PointsMaterial({ size: 1.1, vertexColors: true, sizeAttenuation: true });
 
-    // ── Semantic classes ─────────────────────────────────────────────────────
+    // ── Colouring ────────────────────────────────────────────────────────────
+    // colorMode: "semantic" (class colours) or "robot" (which robot saw it).
+    var colorMode = "semantic";
     var visible = {};
-    Object.keys(manifest.labels).forEach(function (k) { visible[k] = true; });
+    var colorVersion = 0; // bumped whenever colours need recomputing
 
-    function recolor(entry) {
-      var map = entry.map, colors = entry.colors;
+    function recolor(env, entry) {
+      var map = entry.map, colors = entry.colors, labels = env.manifest.labels;
+      var robotColors = (env.datasets.all && env.datasets.all.robots || []).map(function (id) {
+        return env.datasets[id].color;
+      });
+      var fixed = entry.dataset.color; // single-robot map
       for (var i = 0; i < map.n; i++) {
-        var info = manifest.labels[map.labels[i]];
+        var lid = map.labels[i];
+        var info = labels[lid];
         var o = i * 3;
-        if (!info || !visible[map.labels[i]]) {
+        if (!info || visible[lid] === false) {
           colors[o] = colors[o + 1] = colors[o + 2] = 0.07; // fade into background
           continue;
         }
+        var c = colorMode === "robot"
+          ? (fixed || (map.robots ? robotColors[map.robots[i]] : null) || info.color)
+          : info.color;
         // Subtle height shading keeps structure readable from above.
         var t = (map.xyz[o + 2] - entry.zMin) / (entry.zMax - entry.zMin || 1);
         var shade = 0.72 + 0.38 * t;
-        colors[o] = Math.min(1, info.color[0] / 255 * shade);
-        colors[o + 1] = Math.min(1, info.color[1] / 255 * shade);
-        colors[o + 2] = Math.min(1, info.color[2] / 255 * shade);
+        colors[o] = Math.min(1, c[0] / 255 * shade);
+        colors[o + 1] = Math.min(1, c[1] / 255 * shade);
+        colors[o + 2] = Math.min(1, c[2] / 255 * shade);
       }
       entry.geom.attributes.color.needsUpdate = true;
+      entry.colorVersion = colorVersion;
     }
 
-    // ── Maps (loaded on demand, cached) ──────────────────────────────────────
-    var cache = {};
-    function loadMap(id) {
-      if (cache[id]) return cache[id];
-      cache[id] = fetchBuffer(base + datasets[id].map + version).then(function (buf) {
-        var map = decode(buf, scale, "labels");
+    // ── Environments (manifest, maps and tracks loaded on demand, cached) ────
+    var envs = {};
+    function getEnv(id) {
+      if (envs[id]) return envs[id];
+      envs[id] = fetchJSON(base + id + "_map.json" + version).then(function (manifest) {
+        var env = { id: id, manifest: manifest, datasets: {}, maps: {}, tracks: {},
+                    trajGroup: new THREE.Group(), maxDuration: 0 };
+        manifest.datasets.forEach(function (d) { env.datasets[d.id] = d; });
+        return loadTracks(env).then(function () { return env; });
+      });
+      envs[id].catch(function () { delete envs[id]; }); // allow a retry
+      return envs[id];
+    }
+
+    function loadMap(env, id) {
+      if (env.maps[id]) return env.maps[id];
+      var d = env.datasets[id];
+      env.maps[id] = fetchBuffer(base + d.map + version).then(function (buf) {
+        var map = decode(buf, env.manifest.scale_m, "labels", d.robot_ids);
         var zMin = Infinity, zMax = -Infinity;
         for (var i = 2; i < map.xyz.length; i += 3) {
           if (map.xyz[i] < zMin) zMin = map.xyz[i];
@@ -136,36 +170,13 @@
         geom.setAttribute("position", new THREE.BufferAttribute(map.xyz, 3));
         geom.setAttribute("color", new THREE.BufferAttribute(colors, 3));
         geom.computeBoundingBox();
-        var entry = { map: map, geom: geom, colors: colors, zMin: zMin, zMax: zMax,
+        var entry = { dataset: d, map: map, geom: geom, colors: colors, zMin: zMin, zMax: zMax,
                       points: new THREE.Points(geom, material) };
-        recolor(entry);
+        recolor(env, entry);
         return entry;
       });
-      return cache[id];
-    }
-
-    // ── Trajectories + robot markers ─────────────────────────────────────────
-    var tracks = {};
-    var trajGroup = new THREE.Group();
-    scene.add(trajGroup);
-    var maxDuration = 0;
-
-    function loadTracks() {
-      return Promise.all(robotSets.map(function (d) {
-        return fetchBuffer(base + d.traj + version).then(function (buf) {
-          var tr = decode(buf, scale, "times");
-          var color = new THREE.Color(rgb(d.color));
-          var g = new THREE.BufferGeometry();
-          g.setAttribute("position", new THREE.BufferAttribute(tr.xyz, 3));
-          var line = new THREE.Line(g, new THREE.LineBasicMaterial({ color: color.clone().lerp(new THREE.Color(0xffffff), 0.3) }));
-          line.position.z = 0.4;
-          var marker = makeAxes(AXIS_LENGTH, AXIS_RADIUS);
-          trajGroup.add(line);
-          trajGroup.add(marker);
-          maxDuration = Math.max(maxDuration, tr.t[tr.n - 1]);
-          tracks[d.id] = { data: tr, line: line, marker: marker };
-        });
-      }));
+      env.maps[id].catch(function () { delete env.maps[id]; });
+      return env.maps[id];
     }
 
     // RViz-style pose axes: X red, Y green, Z blue, built from cylinders so they
@@ -183,6 +194,25 @@
       var z = new THREE.Mesh(cyl, axisMats[2]); z.rotation.x = Math.PI / 2;
       group.add(x, y, z);
       return group;
+    }
+
+    function loadTracks(env) {
+      var robotSets = env.manifest.datasets.filter(function (d) { return d.traj; });
+      return Promise.all(robotSets.map(function (d) {
+        return fetchBuffer(base + d.traj + version).then(function (buf) {
+          var tr = decode(buf, env.manifest.scale_m, "times");
+          var color = new THREE.Color(rgb(d.color));
+          var g = new THREE.BufferGeometry();
+          g.setAttribute("position", new THREE.BufferAttribute(tr.xyz, 3));
+          var line = new THREE.Line(g, new THREE.LineBasicMaterial({ color: color.clone().lerp(new THREE.Color(0xffffff), 0.3) }));
+          line.position.z = 0.4;
+          var marker = makeAxes(AXIS_LENGTH, AXIS_RADIUS);
+          env.trajGroup.add(line);
+          env.trajGroup.add(marker);
+          env.maxDuration = Math.max(env.maxDuration, tr.t[tr.n - 1]);
+          env.tracks[d.id] = { data: tr, line: line, marker: marker };
+        });
+      }));
     }
 
     var qa = new THREE.Quaternion(), qb = new THREE.Quaternion();
@@ -231,7 +261,6 @@
     }
 
     // ── UI ───────────────────────────────────────────────────────────────────
-    var toolbar = root.querySelector(".semantic-map__toolbar");
     function button(parent, label, title, onClick, pressed) {
       var b = el("button", "semantic-map__btn", label);
       b.type = "button";
@@ -241,8 +270,31 @@
       parent.appendChild(b);
       return b;
     }
-    button(toolbar, "3D", "Perspective view", function () { setView("orbit"); });
-    button(toolbar, "Top", "Top-down view", function () { setView("top"); });
+    function group(parent, label) {
+      var g = el("div", "semantic-map__group");
+      g.setAttribute("role", "group");
+      g.setAttribute("aria-label", label);
+      parent.appendChild(g);
+      return g;
+    }
+
+    // Environment picker (top-left)
+    var envPicker = root.querySelector(".semantic-map__envs");
+    var envBtns = {};
+    envList.forEach(function (e) {
+      envBtns[e.id] = button(envPicker, e.name, "Show " + e.name, function () { showEnv(e.id); }, false);
+    });
+
+    // Toolbar (top-right)
+    var toolbar = root.querySelector(".semantic-map__toolbar");
+    var colorGroup = group(toolbar, "Colour points by");
+    var modeBtns = {
+      semantic: button(colorGroup, "Semantic", "Colour points by semantic class", function () { setColorMode("semantic"); }, true),
+      robot: button(colorGroup, "Robot", "Colour points by the robot that observed them", function () { setColorMode("robot"); }, false),
+    };
+    var viewGroup = group(toolbar, "View");
+    button(viewGroup, "3D", "Perspective view", function () { setView("orbit"); });
+    button(viewGroup, "Top", "Top-down view", function () { setView("top"); });
     var rotateBtn = button(toolbar, "Rotate", "Toggle auto-rotate", function () {
       controls.autoRotate = !controls.autoRotate;
       rotateBtn.setAttribute("aria-pressed", String(controls.autoRotate));
@@ -250,7 +302,7 @@
     var showPaths = true;
     var pathBtn = button(toolbar, "Paths", "Toggle robot trajectories", function () {
       showPaths = !showPaths;
-      trajGroup.visible = showPaths;
+      if (currentEnv) currentEnv.trajGroup.visible = showPaths;
       pathBtn.setAttribute("aria-pressed", String(showPaths));
     }, true);
     if (root.requestFullscreen) {
@@ -264,96 +316,154 @@
       rotateBtn.setAttribute("aria-pressed", "false");
     });
 
-    // Robot selector
+    function setColorMode(mode) {
+      colorMode = mode;
+      colorVersion++;
+      Object.keys(modeBtns).forEach(function (k) { modeBtns[k].setAttribute("aria-pressed", String(k === mode)); });
+      root.classList.toggle("is-robot-colors", mode === "robot");
+      if (active) recolor(currentEnv, active);
+    }
+
+    // Robot picker (bottom-left), rebuilt per environment
     var picker = root.querySelector(".semantic-map__robots");
     var pickerBtns = {};
-    manifest.datasets.forEach(function (d) {
-      var b = el("button", "semantic-map__btn semantic-map__robot");
-      b.type = "button";
-      b.setAttribute("aria-pressed", "false");
-      if (d.color) {
-        var dot = el("span", "semantic-map__dot");
-        dot.style.background = rgb(d.color);
-        b.appendChild(dot);
-      }
-      b.appendChild(document.createTextNode(d.name));
-      b.addEventListener("click", function () { select(d.id); });
-      picker.appendChild(b);
-      pickerBtns[d.id] = b;
-    });
+    function buildPicker(env) {
+      picker.textContent = "";
+      pickerBtns = {};
+      env.manifest.datasets.forEach(function (d) {
+        var b = el("button", "semantic-map__btn semantic-map__robot");
+        b.type = "button";
+        b.setAttribute("aria-pressed", "false");
+        if (d.color) {
+          var dot = el("span", "semantic-map__dot");
+          dot.style.background = rgb(d.color);
+          b.appendChild(dot);
+        }
+        b.appendChild(document.createTextNode(d.name));
+        b.addEventListener("click", function () { select(d.id); });
+        picker.appendChild(b);
+        pickerBtns[d.id] = b;
+      });
+    }
 
-    // Legend
+    // Legend (class chips). The class list is shared by every environment; chips
+    // for classes an environment doesn't contain are hidden in updateStats.
     var legend = root.querySelector(".semantic-map__legend");
     var chips = {};
-    var allCounts = (datasets.all || manifest.datasets[0]).label_counts;
-    Object.keys(manifest.labels)
-      .filter(function (k) { return allCounts[k] > 0; })
-      .sort(function (a, b) { return allCounts[b] - allCounts[a]; })
-      .forEach(function (k) {
-        var info = manifest.labels[k];
-        var chip = el("button", "semantic-map__chip");
-        chip.type = "button";
-        chip.setAttribute("aria-pressed", "true");
-        var sw = el("span", "semantic-map__swatch");
-        sw.style.background = rgb(info.color);
-        chip.appendChild(sw);
-        chip.appendChild(document.createTextNode(info.name));
-        chip.addEventListener("click", function () {
-          visible[k] = !visible[k];
-          chip.setAttribute("aria-pressed", String(visible[k]));
-          if (active) recolor(active);
-          Object.keys(cache).forEach(function (id) { cache[id].then(function (e) { e.stale = e !== active; }); });
+    function buildLegend(env) {
+      var labels = env.manifest.labels;
+      var counts = (env.datasets.all || env.manifest.datasets[0]).label_counts;
+      Object.keys(labels)
+        .sort(function (a, b) { return (counts[b] || 0) - (counts[a] || 0); })
+        .forEach(function (k) {
+          visible[k] = true;
+          var chip = el("button", "semantic-map__chip");
+          chip.type = "button";
+          chip.setAttribute("aria-pressed", "true");
+          var sw = el("span", "semantic-map__swatch");
+          sw.style.background = rgb(labels[k].color);
+          chip.appendChild(sw);
+          chip.appendChild(document.createTextNode(labels[k].name));
+          chip.addEventListener("click", function () {
+            visible[k] = !visible[k];
+            colorVersion++;
+            chip.setAttribute("aria-pressed", String(visible[k]));
+            if (active) recolor(currentEnv, active);
+          });
+          legend.appendChild(chip);
+          chips[k] = chip;
         });
-        legend.appendChild(chip);
-        chips[k] = chip;
-      });
+    }
 
     var stats = root.querySelector(".semantic-map__stats");
-    function updateStats(d) {
+    function updateStats(env, d) {
       var ids = d.traj ? [d.id] : (d.robots || []);
-      var path = ids.reduce(function (s, id) { return s + (datasets[id].path_m || 0); }, 0);
+      var path = ids.reduce(function (s, id) { return s + (env.datasets[id].path_m || 0); }, 0);
       stats.textContent = d.points.toLocaleString() + " points · " + d.keyframes + " keyframes · " +
         (path >= 1000 ? (path / 1000).toFixed(1) + " km" : Math.round(path) + " m") +
         (ids.length > 1 ? " of paths" : " path");
+      var envCounts = (env.datasets.all || d).label_counts;
       Object.keys(chips).forEach(function (k) {
         var c = d.label_counts[k] || 0;
         chips[k].title = c.toLocaleString() + " points — click to toggle";
         chips[k].disabled = c === 0;
+        chips[k].hidden = !envCounts[k];
       });
     }
 
-    // ── Dataset switching ────────────────────────────────────────────────────
-    var active = null, activeId = null, selecting = 0, loopSpan = 1;
+    // ── Switching ────────────────────────────────────────────────────────────
+    var currentEnv = null, active = null, activeId = null, selecting = 0, loopSpan = 1;
+
+    function showPoints(entry) {
+      if (active) scene.remove(active.points);
+      if (entry.colorVersion !== colorVersion) recolor(currentEnv, entry);
+      active = entry;
+      scene.add(entry.points);
+    }
+
     function select(id) {
+      var env = currentEnv;
       var token = ++selecting;
       activeId = id;
       Object.keys(pickerBtns).forEach(function (k) {
         pickerBtns[k].setAttribute("aria-pressed", String(k === id));
       });
-      var d = datasets[id];
-      updateStats(d);
+      var d = env.datasets[id];
+      updateStats(env, d);
 
       // Show only the selected robot's track (all of them for "all").
-      var shown = d.traj ? [id] : Object.keys(tracks);
+      var shown = d.traj ? [id] : Object.keys(env.tracks);
       loopSpan = 0;
-      Object.keys(tracks).forEach(function (k) {
-        var on = shown.indexOf(k) >= 0;
-        tracks[k].line.visible = tracks[k].marker.visible = on;
-        if (on) loopSpan = Math.max(loopSpan, tracks[k].data.t[tracks[k].data.n - 1]);
+      Object.keys(env.tracks).forEach(function (k) {
+        var tr = env.tracks[k], on = shown.indexOf(k) >= 0;
+        tr.line.visible = tr.marker.visible = on;
+        if (on) loopSpan = Math.max(loopSpan, tr.data.t[tr.data.n - 1]);
       });
 
       var slow = setTimeout(function () { if (token === selecting) status.textContent = "Loading " + d.name + "…"; }, 150);
-      loadMap(id).then(function (entry) {
+      loadMap(env, id).then(function (entry) {
         clearTimeout(slow);
         if (token !== selecting) return;
-        if (active) scene.remove(active.points);
-        if (entry.stale) { recolor(entry); entry.stale = false; }
-        active = entry;
-        scene.add(entry.points);
+        showPoints(entry);
         status.textContent = "";
       }).catch(function (err) {
         clearTimeout(slow);
-        fail(status, d.name, err);
+        if (token === selecting) fail(status, d.name, err);
+      });
+    }
+
+    var defaultId = root.dataset.default || "all";
+    function showEnv(id) {
+      var token = ++selecting;
+      Object.keys(envBtns).forEach(function (k) { envBtns[k].setAttribute("aria-pressed", String(k === id)); });
+      var name = envBtns[id] ? envBtns[id].textContent : id;
+      var slow = setTimeout(function () { if (token === selecting) status.textContent = "Loading " + name + "…"; }, 150);
+
+      getEnv(id).then(function (env) {
+        var frameId = env.datasets.all ? "all" : env.manifest.datasets[0].id;
+        return loadMap(env, frameId).then(function (entry) { return [env, entry]; });
+      }).then(function (res) {
+        clearTimeout(slow);
+        if (token !== selecting) return;
+        var env = res[0], entry = res[1];
+        if (currentEnv) scene.remove(currentEnv.trajGroup);
+        currentEnv = env;
+        scene.add(env.trajGroup);
+        env.trajGroup.visible = showPaths;
+        // Points slightly larger than the voxel spacing so surfaces read as solid.
+        material.size = 1.1 * (env.manifest.map_voxel_m || 1);
+        if (!legend.childNodes.length) buildLegend(env);
+        buildPicker(env);
+        frame(entry.geom.boundingBox);
+        setView(currentView);
+        var want = env.datasets[activeId] ? activeId : (env.datasets[defaultId] ? defaultId : env.manifest.datasets[0].id);
+        showPoints(entry); // the framing map is already here; select() swaps if needed
+        status.textContent = "";
+        select(want);
+        root.classList.add("is-ready");
+      }).catch(function (err) {
+        clearTimeout(slow);
+        if (token === selecting) fail(status, name, err);
       });
     }
 
@@ -379,28 +489,22 @@
     function tick(now) {
       requestAnimationFrame(tick);
       if (!onScreen) return;
-      if (showPaths && maxDuration > 0) {
+      var env = currentEnv;
+      if (env && showPaths && env.maxDuration > 0) {
         // Robots share a clock, so markers replay the runs in sync.
-        var rate = maxDuration / PLAYBACK_SECONDS;
+        var rate = env.maxDuration / PLAYBACK_SECONDS;
         var time = reduceMotion ? 0 : ((now - start) / 1000 * rate) % (loopSpan + 2 * rate);
-        Object.keys(tracks).forEach(function (k) {
-          if (tracks[k].marker.visible) placeMarker(tracks[k], time);
+        Object.keys(env.tracks).forEach(function (k) {
+          if (env.tracks[k].marker.visible) placeMarker(env.tracks[k], time);
         });
       }
       controls.update();
       renderer.render(scene, camera);
     }
+    requestAnimationFrame(tick);
 
-    // ── Start: frame the camera on the combined map, then show the default ──
-    var defaultId = datasets[root.dataset.default] ? root.dataset.default : manifest.datasets[0].id;
-    var frameId = datasets.all ? "all" : defaultId;
-    Promise.all([loadMap(frameId), loadTracks()]).then(function (res) {
-      frame(res[0].geom.boundingBox);
-      setView(currentView);
-      select(defaultId);
-      requestAnimationFrame(tick);
-      root.classList.add("is-ready");
-    }).catch(function (err) { fail(status, "the map", err); });
+    if (!envList.length) throw new Error("no environments configured");
+    showEnv(envList[0].id);
   }
 
   function boot() {

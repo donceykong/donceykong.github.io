@@ -445,8 +445,16 @@ hr { border: 0; border-top: 1px solid var(--border); margin: 3rem 0; }
   pointer-events: none;
   background: linear-gradient(rgba(11, 13, 18, 0.7), rgba(11, 13, 18, 0));
 }
-.semantic-map__title { font-weight: 600; font-size: 0.98rem; }
-.semantic-map__stats { font-family: var(--mono); font-size: 0.72rem; color: #9aa2b1; margin-top: 0.15rem; }
+.semantic-map__info { pointer-events: auto; }
+.semantic-map__stats { font-family: var(--mono); font-size: 0.72rem; color: #9aa2b1; margin-top: 0.5rem; }
+
+/* Buttons that sit flush together as one segmented control */
+.semantic-map__group { display: inline-flex; }
+.semantic-map__group > .semantic-map__btn { border-radius: 0; }
+.semantic-map__group > .semantic-map__btn + .semantic-map__btn { margin-left: -1px; }
+.semantic-map__group > .semantic-map__btn:first-child { border-radius: var(--radius-sm) 0 0 var(--radius-sm); }
+.semantic-map__group > .semantic-map__btn:last-child { border-radius: 0 var(--radius-sm) var(--radius-sm) 0; }
+.semantic-map__envs .semantic-map__btn { font-size: 0.85rem; font-weight: 600; padding: 0.4rem 0.85rem; }
 
 .semantic-map__toolbar { display: flex; flex-wrap: wrap; justify-content: flex-end; gap: 0.35rem; pointer-events: auto; }
 .semantic-map__btn {
@@ -507,6 +515,7 @@ hr { border: 0; border-top: 1px solid var(--border); margin: 3rem 0; }
 .semantic-map__chip:hover { border-color: var(--muted); }
 .semantic-map__chip[aria-pressed="false"] { opacity: 0.4; }
 .semantic-map__chip:disabled { opacity: 0.25; cursor: default; }
+.semantic-map__chip[hidden] { display: none; }
 .semantic-map__swatch { width: 10px; height: 10px; border-radius: 1px; flex: none; }
 .semantic-map figcaption { text-align: left; margin-top: 0.75rem; }
 
