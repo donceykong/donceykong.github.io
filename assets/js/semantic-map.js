@@ -93,7 +93,9 @@
     controls.autoRotate = !reduceMotion;
     controls.autoRotateSpeed = 0.35;
 
-    var material = new THREE.PointsMaterial({ size: 1.1, vertexColors: true, sizeAttenuation: true });
+    // Points slightly larger than the voxel spacing so surfaces read as solid.
+    var pointSize = 1.1 * (manifest.map_voxel_m || 1);
+    var material = new THREE.PointsMaterial({ size: pointSize, vertexColors: true, sizeAttenuation: true });
 
     // ── Semantic classes ─────────────────────────────────────────────────────
     var visible = {};
