@@ -1,0 +1,253 @@
+{
+  "dataset": "CU-Multi",
+  "env": "kittredge_loop",
+  "crs": "EPSG:32613",
+  "origin_utm": [
+    477631.6,
+    4428080.3,
+    1642.2
+  ],
+  "scale_m": 0.1,
+  "keyframe_dist_m": 10.0,
+  "scan_voxel_m": 0.5,
+  "map_voxel_m": 0.5,
+  "labels": {
+    "1": {
+      "name": "road",
+      "color": [
+        80,
+        80,
+        80
+      ]
+    },
+    "2": {
+      "name": "sidewalk",
+      "color": [
+        200,
+        160,
+        100
+      ]
+    },
+    "3": {
+      "name": "parking",
+      "color": [
+        140,
+        100,
+        180
+      ]
+    },
+    "4": {
+      "name": "other-ground",
+      "color": [
+        139,
+        90,
+        43
+      ]
+    },
+    "5": {
+      "name": "building",
+      "color": [
+        30,
+        120,
+        255
+      ]
+    },
+    "6": {
+      "name": "fence",
+      "color": [
+        255,
+        165,
+        0
+      ]
+    },
+    "7": {
+      "name": "terrain",
+      "color": [
+        144,
+        238,
+        144
+      ]
+    },
+    "8": {
+      "name": "water",
+      "color": [
+        65,
+        105,
+        225
+      ]
+    },
+    "9": {
+      "name": "bridge",
+      "color": [
+        192,
+        192,
+        192
+      ]
+    },
+    "10": {
+      "name": "vehicle",
+      "color": [
+        255,
+        0,
+        255
+      ]
+    },
+    "11": {
+      "name": "tree",
+      "color": [
+        0,
+        100,
+        0
+      ]
+    },
+    "12": {
+      "name": "stairs",
+      "color": [
+        255,
+        128,
+        0
+      ]
+    }
+  },
+  "datasets": [
+    {
+      "id": "all",
+      "map": "kittredge_loop_all_map.bin",
+      "points": 1480911,
+      "label_counts": {
+        "1": 41470,
+        "2": 55932,
+        "3": 18352,
+        "4": 28681,
+        "5": 400067,
+        "6": 2224,
+        "7": 232562,
+        "9": 824,
+        "10": 11947,
+        "11": 686636,
+        "12": 2216
+      },
+      "name": "All robots",
+      "robots": [
+        "robot1",
+        "robot2",
+        "robot3",
+        "robot4"
+      ],
+      "robot_ids": true,
+      "keyframes": 720
+    },
+    {
+      "id": "robot1",
+      "map": "kittredge_loop_robot1_map.bin",
+      "points": 420591,
+      "label_counts": {
+        "1": 14423,
+        "2": 12713,
+        "3": 6672,
+        "4": 4905,
+        "5": 103870,
+        "6": 965,
+        "7": 78068,
+        "9": 312,
+        "10": 3873,
+        "11": 194533,
+        "12": 257
+      },
+      "name": "Robot 1",
+      "color": [
+        87,
+        227,
+        137
+      ],
+      "traj": "kittredge_loop_robot1_traj.bin",
+      "keyframes": 124,
+      "path_m": 1431.0,
+      "duration_s": 1264.8
+    },
+    {
+      "id": "robot2",
+      "map": "kittredge_loop_robot2_map.bin",
+      "points": 484867,
+      "label_counts": {
+        "1": 14781,
+        "2": 14467,
+        "3": 7097,
+        "4": 6283,
+        "5": 118696,
+        "6": 931,
+        "7": 89996,
+        "9": 465,
+        "10": 3810,
+        "11": 228008,
+        "12": 333
+      },
+      "name": "Robot 2",
+      "color": [
+        192,
+        97,
+        203
+      ],
+      "traj": "kittredge_loop_robot2_traj.bin",
+      "keyframes": 132,
+      "path_m": 1607.9,
+      "duration_s": 1151.5
+    },
+    {
+      "id": "robot3",
+      "map": "kittredge_loop_robot3_map.bin",
+      "points": 590723,
+      "label_counts": {
+        "1": 16908,
+        "2": 24298,
+        "3": 3959,
+        "4": 13986,
+        "5": 168757,
+        "6": 1342,
+        "7": 82443,
+        "9": 395,
+        "10": 2926,
+        "11": 274137,
+        "12": 1572
+      },
+      "name": "Robot 3",
+      "color": [
+        255,
+        163,
+        72
+      ],
+      "traj": "kittredge_loop_robot3_traj.bin",
+      "keyframes": 176,
+      "path_m": 2244.0,
+      "duration_s": 1634.2
+    },
+    {
+      "id": "robot4",
+      "map": "kittredge_loop_robot4_map.bin",
+      "points": 1007365,
+      "label_counts": {
+        "1": 22378,
+        "2": 40831,
+        "3": 11336,
+        "4": 19512,
+        "5": 267781,
+        "6": 1648,
+        "7": 150468,
+        "9": 513,
+        "10": 6613,
+        "11": 484963,
+        "12": 1322
+      },
+      "name": "Robot 4",
+      "color": [
+        98,
+        160,
+        234
+      ],
+      "traj": "kittredge_loop_robot4_traj.bin",
+      "keyframes": 288,
+      "path_m": 3434.8,
+      "duration_s": 2519.5
+    }
+  ]
+}

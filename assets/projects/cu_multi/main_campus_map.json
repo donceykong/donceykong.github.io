@@ -133,6 +133,7 @@
         "robot3",
         "robot4"
       ],
+      "robot_ids": true,
       "keyframes": 902
     },
     {

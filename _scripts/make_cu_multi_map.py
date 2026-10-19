@@ -11,7 +11,8 @@ origin so they line up in the viewer.
 
 Output (in --out-dir, <env> = main_campus):
     <env>_<robot>_map.bin   uint32 N | int16 xyz[N*3] (decimetres, map-centred) | uint8 label[N]
-    <env>_all_map.bin       same format, all robots merged
+    <env>_all_map.bin       same format, all robots merged, followed by uint8 robot[N]
+                            (index into the manifest's robots list; majority per voxel)
     <env>_<robot>_traj.bin  uint32 M | int16 xyz[M*3] | float32 t[M] (s since the earliest start)
                             | float32 quat[M*4] (qx, qy, qz, qw; lidar orientation)
     <env>_map.json          manifest: origin, scale, labels, and one entry per dataset
@@ -53,8 +54,9 @@ ROBOT_COLORS = {
 }
 
 
-def voxel_majority(pts, labels, voxel):
-    """Voxel-downsample to voxel centroids, keeping the most common label per voxel."""
+def voxel_majority(pts, labels, voxel, owners=None):
+    """Voxel-downsample to voxel centroids, keeping the most common label per voxel.
+    If `owners` (e.g. robot index per point) is given, also return the most common owner."""
     keys = np.floor(pts / voxel).astype(np.int64)
     _, inv = np.unique(keys, axis=0, return_inverse=True)
     inv = inv.ravel()
@@ -64,7 +66,11 @@ def voxel_majority(pts, labels, voxel):
                          for k in range(3)], axis=1) / counts[:, None]
     votes = np.zeros((n_vox, max(LABEL_NAMES) + 1), dtype=np.int32)
     np.add.at(votes, (inv, labels.astype(np.int64)), 1)
-    return centroid, votes.argmax(axis=1).astype(np.uint8)
+    if owners is None:
+        return centroid, votes.argmax(axis=1).astype(np.uint8)
+    owner_votes = np.zeros((n_vox, int(owners.max()) + 1), dtype=np.int32)
+    np.add.at(owner_votes, (inv, owners.astype(np.int64)), 1)
+    return centroid, votes.argmax(axis=1).astype(np.uint8), owner_votes.argmax(axis=1).astype(np.uint8)
 
 
 def render_thumb(pts, labels, path):
@@ -154,11 +160,13 @@ def quantise(pts, origin):
     return q.astype(np.int16)
 
 
-def write_map(path, pts, lbl, origin):
+def write_map(path, pts, lbl, origin, owners=None):
     with open(path, "wb") as f:
         np.array([len(pts)], dtype=np.uint32).tofile(f)
         quantise(pts, origin).tofile(f)
         lbl.astype(np.uint8).tofile(f)
+        if owners is not None:
+            owners.astype(np.uint8).tofile(f)
 
 
 def main():
@@ -182,8 +190,10 @@ def main():
     raw = {r: accumulate_robot(os.path.join(args.data_dir, args.env, r), r, args.env, args)
            for r in robots}
     maps = {r: voxel_majority(raw[r][0], raw[r][1], args.map_voxel) for r in robots}
-    maps["all"] = voxel_majority(np.concatenate([raw[r][0] for r in robots]),
-                                 np.concatenate([raw[r][1] for r in robots]), args.map_voxel)
+    maps["all"] = voxel_majority(
+        np.concatenate([raw[r][0] for r in robots]),
+        np.concatenate([raw[r][1] for r in robots]), args.map_voxel,
+        owners=np.concatenate([np.full(len(raw[r][1]), i, np.uint8) for i, r in enumerate(robots)]))
 
     origin = np.round(np.median(maps["all"][0], axis=0), 1)
     t0 = min(raw[r][3][0, 0] for r in robots)
@@ -194,13 +204,14 @@ def main():
     written = []
     datasets = []
     for key in ["all"] + robots:
-        pts, lbl = maps[key]
+        pts, lbl = maps[key][:2]
+        owners = maps[key][2] if key == "all" else None
         map_name = f"{args.env}_{key}_map.bin"
-        write_map(os.path.join(args.out_dir, map_name), pts, lbl, origin)
+        write_map(os.path.join(args.out_dir, map_name), pts, lbl, origin, owners)
         written.append(map_name)
         entry = {"id": key, "map": map_name, "points": int(len(pts)), "label_counts": counts(lbl)}
         if key == "all":
-            entry.update(name="All robots", robots=robots,
+            entry.update(name="All robots", robots=robots, robot_ids=True,
                          keyframes=sum(raw[r][2] for r in robots))
         else:
             xyz, ts, quats = thin_trajectory(raw[key][3])
@@ -235,7 +246,7 @@ def main():
 
     if args.thumb:
         thumb_name = f"{args.env}_all_thumb.png"
-        pts, lbl = maps["all"]
+        pts, lbl = maps["all"][:2]
         render_thumb(pts - origin, lbl, os.path.join(args.out_dir, thumb_name))
         written.append(thumb_name)
 
