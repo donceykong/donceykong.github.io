@@ -474,23 +474,20 @@ hr { border: 0; border-top: 1px solid var(--border); margin: 3rem 0; }
 }
 .semantic-map__status:empty { display: none; }
 
-.semantic-map__hint {
+.semantic-map__robots {
   position: absolute;
-  bottom: 0.8rem;
-  left: 50%;
-  transform: translateX(-50%);
-  font-size: 0.74rem;
-  color: rgba(232, 234, 239, 0.7);
-  background: rgba(11, 13, 18, 0.55);
-  padding: 0.3rem 0.75rem;
-  border-radius: var(--radius-sm);
-  white-space: nowrap;
-  pointer-events: none;
+  left: 1rem;
+  right: 1rem;
+  bottom: 1rem;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
   opacity: 0;
   transition: opacity 0.4s;
 }
-.semantic-map.is-ready .semantic-map__hint { opacity: 1; }
-@media (hover: none) { .semantic-map__hint { display: none; } }
+.semantic-map.is-ready .semantic-map__robots { opacity: 1; }
+.semantic-map__robot { display: inline-flex; align-items: center; gap: 0.4rem; }
+.semantic-map__dot { width: 8px; height: 8px; border-radius: 1px; flex: none; }
 
 .semantic-map__legend { display: flex; flex-wrap: wrap; gap: 0.4rem; margin-top: 0.9rem; }
 .semantic-map__chip {
@@ -509,6 +506,7 @@ hr { border: 0; border-top: 1px solid var(--border); margin: 3rem 0; }
 }
 .semantic-map__chip:hover { border-color: var(--muted); }
 .semantic-map__chip[aria-pressed="false"] { opacity: 0.4; }
+.semantic-map__chip:disabled { opacity: 0.25; cursor: default; }
 .semantic-map__swatch { width: 10px; height: 10px; border-radius: 1px; flex: none; }
 .semantic-map figcaption { text-align: left; margin-top: 0.75rem; }
 

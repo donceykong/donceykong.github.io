@@ -1,14 +1,16 @@
 {% comment %}
-  Interactive semantic map viewer.
-  Usage: {% include semantic_map.html base="assets/projects/cu_multi/main_campus_robot1" title="..." caption="..." %}
-  Expects <base>_map.bin, <base>_traj.bin and <base>_map.json (see _scripts/make_cu_multi_map.py).
+  Interactive semantic map viewer with a robot selector.
+  Usage: {% include semantic_map.html dir="assets/projects/cu_multi/" env="main_campus" default="all" title="..." caption="..." %}
+  Expects <dir><env>_map.json (manifest), the map/trajectory files it lists, and
+  <dir><env>_all_thumb.png (see _scripts/make_cu_multi_map.py).
 {% endcomment %}
+{%- assign dir = include.dir | relative_url -%}
 <figure class="semantic-map breakout"
-        data-map="{{ include.base | append: '_map.bin' | relative_url }}"
-        data-traj="{{ include.base | append: '_traj.bin' | relative_url }}"
-        data-meta="{{ include.base | append: '_map.json' | relative_url }}">
+        data-manifest="{{ dir }}{{ include.env }}_map.json"
+        data-base="{{ dir }}"
+        data-default="{{ include.default | default: 'all' }}">
   <div class="semantic-map__stage">
-    <img class="semantic-map__poster" src="{{ include.base | append: '_thumb.png' | relative_url }}" alt="Top-down semantic map preview" loading="lazy">
+    <img class="semantic-map__poster" src="{{ dir }}{{ include.env }}_all_thumb.png" alt="Top-down semantic map preview" loading="lazy">
     <div class="semantic-map__hud">
       <div>
         {% if include.title %}<div class="semantic-map__title">{{ include.title }}</div>{% endif %}
@@ -16,8 +18,8 @@
       </div>
       <div class="semantic-map__toolbar" role="toolbar" aria-label="Map view controls"></div>
     </div>
+    <div class="semantic-map__robots" role="group" aria-label="Choose which robot's map to show"></div>
     <div class="semantic-map__status">Loading map…</div>
-    <div class="semantic-map__hint">Drag to orbit · Scroll to zoom · Right-drag to pan</div>
   </div>
   <div class="semantic-map__legend" aria-label="Semantic classes (click to toggle)"></div>
   {% if include.caption %}<figcaption>{{ include.caption }}</figcaption>{% endif %}

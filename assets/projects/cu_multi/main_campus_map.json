@@ -1,0 +1,247 @@
+{
+  "dataset": "CU-Multi",
+  "env": "main_campus",
+  "crs": "EPSG:32613",
+  "origin_utm": [
+    477263.6,
+    4428476.7,
+    1646.8
+  ],
+  "scale_m": 0.1,
+  "keyframe_dist_m": 10.0,
+  "scan_voxel_m": 1.0,
+  "map_voxel_m": 1.0,
+  "labels": {
+    "1": {
+      "name": "road",
+      "color": [
+        80,
+        80,
+        80
+      ]
+    },
+    "2": {
+      "name": "sidewalk",
+      "color": [
+        200,
+        160,
+        100
+      ]
+    },
+    "3": {
+      "name": "parking",
+      "color": [
+        140,
+        100,
+        180
+      ]
+    },
+    "4": {
+      "name": "other-ground",
+      "color": [
+        139,
+        90,
+        43
+      ]
+    },
+    "5": {
+      "name": "building",
+      "color": [
+        30,
+        120,
+        255
+      ]
+    },
+    "6": {
+      "name": "fence",
+      "color": [
+        255,
+        165,
+        0
+      ]
+    },
+    "7": {
+      "name": "terrain",
+      "color": [
+        144,
+        238,
+        144
+      ]
+    },
+    "8": {
+      "name": "water",
+      "color": [
+        65,
+        105,
+        225
+      ]
+    },
+    "9": {
+      "name": "bridge",
+      "color": [
+        192,
+        192,
+        192
+      ]
+    },
+    "10": {
+      "name": "vehicle",
+      "color": [
+        255,
+        0,
+        255
+      ]
+    },
+    "11": {
+      "name": "tree",
+      "color": [
+        0,
+        100,
+        0
+      ]
+    },
+    "12": {
+      "name": "stairs",
+      "color": [
+        255,
+        128,
+        0
+      ]
+    }
+  },
+  "datasets": [
+    {
+      "id": "all",
+      "map": "main_campus_all_map.bin",
+      "points": 470538,
+      "label_counts": {
+        "1": 11616,
+        "2": 25806,
+        "3": 4578,
+        "4": 18205,
+        "5": 128347,
+        "6": 1937,
+        "7": 58637,
+        "10": 4168,
+        "11": 216595,
+        "12": 649
+      },
+      "name": "All robots",
+      "robots": [
+        "robot1",
+        "robot2",
+        "robot3",
+        "robot4"
+      ],
+      "keyframes": 902
+    },
+    {
+      "id": "robot1",
+      "map": "main_campus_robot1_map.bin",
+      "points": 110889,
+      "label_counts": {
+        "1": 4863,
+        "2": 7995,
+        "3": 1624,
+        "4": 4109,
+        "5": 33787,
+        "6": 720,
+        "7": 10108,
+        "10": 1119,
+        "11": 46503,
+        "12": 61
+      },
+      "name": "Robot 1",
+      "color": [
+        87,
+        227,
+        137
+      ],
+      "traj": "main_campus_robot1_traj.bin",
+      "keyframes": 111,
+      "path_m": 1186.7,
+      "duration_s": 977.5
+    },
+    {
+      "id": "robot2",
+      "map": "main_campus_robot2_map.bin",
+      "points": 135856,
+      "label_counts": {
+        "1": 4904,
+        "2": 9189,
+        "3": 1715,
+        "4": 5577,
+        "5": 43641,
+        "6": 693,
+        "7": 12297,
+        "10": 1086,
+        "11": 56676,
+        "12": 78
+      },
+      "name": "Robot 2",
+      "color": [
+        192,
+        97,
+        203
+      ],
+      "traj": "main_campus_robot2_traj.bin",
+      "keyframes": 134,
+      "path_m": 1445.7,
+      "duration_s": 1088.0
+    },
+    {
+      "id": "robot3",
+      "map": "main_campus_robot3_map.bin",
+      "points": 260051,
+      "label_counts": {
+        "1": 9437,
+        "2": 13117,
+        "3": 2928,
+        "4": 9233,
+        "5": 67196,
+        "6": 1538,
+        "7": 29990,
+        "10": 1764,
+        "11": 124482,
+        "12": 366
+      },
+      "name": "Robot 3",
+      "color": [
+        255,
+        163,
+        72
+      ],
+      "traj": "main_campus_robot3_traj.bin",
+      "keyframes": 269,
+      "path_m": 3093.1,
+      "duration_s": 2075.6
+    },
+    {
+      "id": "robot4",
+      "map": "main_campus_robot4_map.bin",
+      "points": 351814,
+      "label_counts": {
+        "1": 9639,
+        "2": 22689,
+        "3": 3263,
+        "4": 14912,
+        "5": 87797,
+        "6": 1345,
+        "7": 43390,
+        "10": 2601,
+        "11": 165651,
+        "12": 527
+      },
+      "name": "Robot 4",
+      "color": [
+        98,
+        160,
+        234
+      ],
+      "traj": "main_campus_robot4_traj.bin",
+      "keyframes": 388,
+      "path_m": 4362.9,
+      "duration_s": 2742.9
+    }
+  ]
+}

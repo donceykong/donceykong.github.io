@@ -1,19 +1,25 @@
 #!/usr/bin/env python3
 """
-Build a downsampled semantic map of CU-Multi (main_campus, robot1) for the website.
+Build downsampled semantic maps of CU-Multi (main_campus) for the website.
 
-Keyframes are selected every --keyframe-dist metres along the REGISTERED poses
-(which are expressed in the lidar frame). Each keyframe scan is voxel-downsampled,
-transformed into UTM, and accumulated; the accumulated map is voxel-downsampled
-again (majority label per voxel).
+For each robot, keyframes are selected every --keyframe-dist metres along the
+REGISTERED poses (which are expressed in the lidar frame). Each keyframe scan is
+voxel-downsampled, transformed into UTM, and accumulated; the accumulated map is
+voxel-downsampled again (majority label per voxel). A combined map of all robots
+is built the same way from every robot's accumulated scans. All maps share one
+origin so they line up in the viewer.
 
-Output (in --out-dir):
-    main_campus_robot1_map.bin   uint32 N | int16 xyz[N*3] (decimetres, map-centred) | uint8 label[N]
-    main_campus_robot1_traj.bin  uint32 M | int16 xyz[M*3] (same frame, every pose thinned to 1 m)
-    main_campus_robot1_map.json  metadata (origin, scale, label names/colours, counts)
+Output (in --out-dir, <env> = main_campus):
+    <env>_<robot>_map.bin   uint32 N | int16 xyz[N*3] (decimetres, map-centred) | uint8 label[N]
+    <env>_all_map.bin       same format, all robots merged
+    <env>_<robot>_traj.bin  uint32 M | int16 xyz[M*3] | float32 t[M] (s since the earliest start)
+                            | float32 quat[M*4] (qx, qy, qz, qw; lidar orientation)
+    <env>_map.json          manifest: origin, scale, labels, and one entry per dataset
+    <env>_all_thumb.png     transparent top-down render for the project card
 
 Usage:
     python3 _scripts/make_cu_multi_map.py
+    python3 _scripts/make_cu_multi_map.py --robots robot1,robot3
 """
 
 import argparse
@@ -38,6 +44,13 @@ LABEL_COLORS = {
     12: [255, 128,   0],
 }
 SCALE = 0.1  # metres per int16 unit
+# Matches CU-Multi-Semantics/scripts/plot_semantic_map.py ROBOT_COLORS
+ROBOT_COLORS = {
+    "robot1": [ 87, 227, 137],   # green
+    "robot2": [192,  97, 203],   # purple
+    "robot3": [255, 163,  72],   # orange
+    "robot4": [ 98, 160, 234],   # blue
+}
 
 
 def voxel_majority(pts, labels, voxel):
@@ -82,30 +95,16 @@ def render_thumb(pts, labels, path):
     Image.open(path).quantize(256, method=Image.Quantize.FASTOCTREE).save(path, optimize=True)
 
 
-def main():
-    p = argparse.ArgumentParser(description=__doc__.split("\n")[1])
-    p.add_argument("--robot-dir",
-                   default="/media/donceykong/doncey_ssd_02/datasets/CU_MULTI/main_campus/robot1")
-    p.add_argument("--labels-subdir", default="robot1_main_campus_lidar_labels")
-    p.add_argument("--poses", default="robot1_main_campus_REGISTERED_poses.csv")
-    p.add_argument("--keyframe-dist", type=float, default=10.0)
-    p.add_argument("--scan-voxel", type=float, default=1.0)
-    p.add_argument("--map-voxel", type=float, default=1.0)
-    p.add_argument("--max-range", type=float, default=0.0,
-                   help="Drop points farther than this from the sensor (0 = keep all)")
-    p.add_argument("--thumb", action=argparse.BooleanOptionalAction, default=True,
-                   help="Also render a top-down transparent PNG thumbnail for the project card")
-    p.add_argument("--out-dir", default=os.path.join(
-        os.path.dirname(os.path.abspath(__file__)), "..", "assets", "projects", "cu_multi"))
-    args = p.parse_args()
-
-    scan_dir = os.path.join(args.robot_dir, "lidar_bin", "data")
-    label_dir = os.path.join(args.robot_dir, args.labels_subdir)
-    poses = np.loadtxt(os.path.join(args.robot_dir, args.poses), delimiter=",")
+def accumulate_robot(robot_dir, robot, env, args):
+    """Return (UTM points, labels, keyframe count, poses) for one robot's keyframe scans."""
+    scan_dir = os.path.join(robot_dir, "lidar_bin", "data")
+    label_dir = os.path.join(robot_dir, f"{robot}_{env}_lidar_labels")
+    poses = np.loadtxt(os.path.join(robot_dir, f"{robot}_{env}_REGISTERED_poses.csv"), delimiter=",")
     scan_files = sorted(f for f in os.listdir(scan_dir) if f.endswith(".bin"))
     label_files = sorted(f for f in os.listdir(label_dir) if f.endswith(".bin"))
     n_avail = min(len(scan_files), len(label_files), len(poses))
-    print(f"{len(poses)} poses, {len(scan_files)} scans, {len(label_files)} labels -> {n_avail} usable")
+    print(f"{robot}: {len(poses)} poses, {len(scan_files)} scans, {len(label_files)} labels "
+          f"-> {n_avail} usable")
 
     indices = [0]
     last = poses[0, 1:4]
@@ -113,7 +112,6 @@ def main():
         if np.linalg.norm(poses[i, 1:4] - last) >= args.keyframe_dist:
             indices.append(i)
             last = poses[i, 1:4]
-    print(f"{len(indices)} keyframes at {args.keyframe_dist} m")
 
     all_pts, all_lbl = [], []
     for idx in indices:
@@ -136,53 +134,114 @@ def main():
         all_pts.append(xyz)
         all_lbl.append(lbl)
 
-    pts = np.concatenate(all_pts)
-    lbl = np.concatenate(all_lbl)
-    print(f"accumulated {len(pts):,} pts")
-    pts, lbl = voxel_majority(pts, lbl, args.map_voxel)
-    print(f"map after {args.map_voxel} m voxel: {len(pts):,} pts")
+    pts, lbl = np.concatenate(all_pts), np.concatenate(all_lbl)
+    print(f"  {len(indices)} keyframes at {args.keyframe_dist} m, {len(pts):,} pts accumulated")
+    return pts, lbl, len(indices), poses
 
-    origin = np.round(np.median(pts, axis=0), 1)
+
+def thin_trajectory(poses, step=1.0):
+    """Keep poses at least `step` metres apart; returns (xyz, timestamps, quaternions)."""
+    keep = [0]
+    for i in range(1, len(poses)):
+        if np.linalg.norm(poses[i, 1:4] - poses[keep[-1], 1:4]) >= step:
+            keep.append(i)
+    return poses[keep, 1:4], poses[keep, 0], poses[keep, 4:8]
+
+
+def quantise(pts, origin):
     q = np.round((pts - origin) / SCALE)
     assert np.abs(q).max() < 32767, "map too large for int16 at this scale"
+    return q.astype(np.int16)
 
-    traj = [poses[0, 1:4]]
-    for xyz in poses[1:, 1:4]:
-        if np.linalg.norm(xyz - traj[-1]) >= 1.0:
-            traj.append(xyz)
-    traj = np.round((np.array(traj) - origin) / SCALE)
 
-    os.makedirs(args.out_dir, exist_ok=True)
-    stem = os.path.join(args.out_dir, "main_campus_robot1")
-    with open(stem + "_map.bin", "wb") as f:
-        np.array([len(q)], dtype=np.uint32).tofile(f)
-        q.astype(np.int16).tofile(f)
+def write_map(path, pts, lbl, origin):
+    with open(path, "wb") as f:
+        np.array([len(pts)], dtype=np.uint32).tofile(f)
+        quantise(pts, origin).tofile(f)
         lbl.astype(np.uint8).tofile(f)
-    with open(stem + "_traj.bin", "wb") as f:
-        np.array([len(traj)], dtype=np.uint32).tofile(f)
-        traj.astype(np.int16).tofile(f)
 
-    counts = {int(k): int(v) for k, v in zip(*np.unique(lbl, return_counts=True))}
-    meta = {
-        "dataset": "CU-Multi", "env": "main_campus", "robot": "robot1",
-        "crs": "EPSG:32613", "origin_utm": origin.tolist(), "scale_m": SCALE,
+
+def main():
+    p = argparse.ArgumentParser(description=__doc__.split("\n")[1])
+    p.add_argument("--data-dir", default="/media/donceykong/doncey_ssd_02/datasets/CU_MULTI")
+    p.add_argument("--env", default="main_campus")
+    p.add_argument("--robots", default="robot1,robot2,robot3,robot4")
+    p.add_argument("--keyframe-dist", type=float, default=10.0)
+    p.add_argument("--scan-voxel", type=float, default=1.0)
+    p.add_argument("--map-voxel", type=float, default=1.0)
+    p.add_argument("--max-range", type=float, default=0.0,
+                   help="Drop points farther than this from the sensor (0 = keep all)")
+    p.add_argument("--thumb", action=argparse.BooleanOptionalAction, default=True,
+                   help="Also render a top-down transparent PNG of the combined map for the project card")
+    p.add_argument("--out-dir", default=os.path.join(
+        os.path.dirname(os.path.abspath(__file__)), "..", "assets", "projects", "cu_multi"))
+    args = p.parse_args()
+    robots = [r.strip() for r in args.robots.split(",") if r.strip()]
+    os.makedirs(args.out_dir, exist_ok=True)
+
+    raw = {r: accumulate_robot(os.path.join(args.data_dir, args.env, r), r, args.env, args)
+           for r in robots}
+    maps = {r: voxel_majority(raw[r][0], raw[r][1], args.map_voxel) for r in robots}
+    maps["all"] = voxel_majority(np.concatenate([raw[r][0] for r in robots]),
+                                 np.concatenate([raw[r][1] for r in robots]), args.map_voxel)
+
+    origin = np.round(np.median(maps["all"][0], axis=0), 1)
+    t0 = min(raw[r][3][0, 0] for r in robots)
+
+    def counts(lbl):
+        return {str(int(k)): int(v) for k, v in zip(*np.unique(lbl, return_counts=True))}
+
+    written = []
+    datasets = []
+    for key in ["all"] + robots:
+        pts, lbl = maps[key]
+        map_name = f"{args.env}_{key}_map.bin"
+        write_map(os.path.join(args.out_dir, map_name), pts, lbl, origin)
+        written.append(map_name)
+        entry = {"id": key, "map": map_name, "points": int(len(pts)), "label_counts": counts(lbl)}
+        if key == "all":
+            entry.update(name="All robots", robots=robots,
+                         keyframes=sum(raw[r][2] for r in robots))
+        else:
+            xyz, ts, quats = thin_trajectory(raw[key][3])
+            traj_name = f"{args.env}_{key}_traj.bin"
+            with open(os.path.join(args.out_dir, traj_name), "wb") as f:
+                np.array([len(xyz)], dtype=np.uint32).tofile(f)
+                quantise(xyz, origin).tofile(f)
+                (ts - t0).astype(np.float32).tofile(f)
+                quats.astype(np.float32).tofile(f)
+            written.append(traj_name)
+            path_m = float(np.linalg.norm(np.diff(raw[key][3][:, 1:4], axis=0), axis=1).sum())
+            entry.update(name=f"Robot {key[5:]}" if key.startswith("robot") else key,
+                         color=ROBOT_COLORS.get(key, [255, 255, 255]), traj=traj_name,
+                         keyframes=raw[key][2], path_m=round(path_m, 1),
+                         duration_s=round(float(ts[-1] - ts[0]), 1))
+        datasets.append(entry)
+        print(f"{key}: {len(pts):,} pts after {args.map_voxel} m voxel")
+
+    manifest = {
+        "dataset": "CU-Multi", "env": args.env, "crs": "EPSG:32613",
+        "origin_utm": origin.tolist(), "scale_m": SCALE,
         "keyframe_dist_m": args.keyframe_dist, "scan_voxel_m": args.scan_voxel,
-        "map_voxel_m": args.map_voxel, "keyframes": len(indices),
-        "points": int(len(q)), "trajectory_points": int(len(traj)),
-        "labels": {str(k): {"name": LABEL_NAMES[k], "color": LABEL_COLORS[k],
-                            "count": counts.get(k, 0)} for k in LABEL_NAMES if k != 0},
+        "map_voxel_m": args.map_voxel,
+        "labels": {str(k): {"name": LABEL_NAMES[k], "color": LABEL_COLORS[k]}
+                   for k in LABEL_NAMES if k != 0},
+        "datasets": datasets,
     }
-    with open(stem + "_map.json", "w") as f:
-        json.dump(meta, f, indent=2)
+    manifest_name = f"{args.env}_map.json"
+    with open(os.path.join(args.out_dir, manifest_name), "w") as f:
+        json.dump(manifest, f, indent=2)
+    written.append(manifest_name)
 
     if args.thumb:
-        render_thumb(q * SCALE, lbl, stem + "_thumb.png")
+        thumb_name = f"{args.env}_all_thumb.png"
+        pts, lbl = maps["all"]
+        render_thumb(pts - origin, lbl, os.path.join(args.out_dir, thumb_name))
+        written.append(thumb_name)
 
-    print("label distribution:")
-    for k, c in sorted(counts.items()):
-        print(f"  {k:2d} {LABEL_NAMES[k]:13s} {c:>8,} ({100 * c / len(lbl):5.1f}%)")
-    for ext in ("_map.bin", "_traj.bin", "_map.json") + (("_thumb.png",) if args.thumb else ()):
-        print(f"wrote {stem + ext} ({os.path.getsize(stem + ext) / 1e6:.2f} MB)")
+    for name in written:
+        path = os.path.join(args.out_dir, name)
+        print(f"wrote {path} ({os.path.getsize(path) / 1e6:.2f} MB)")
 
 
 if __name__ == "__main__":

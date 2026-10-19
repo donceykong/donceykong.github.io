@@ -3,7 +3,7 @@ layout: project
 title: CU-Multi Dataset
 description: A multi-robot dataset for collaborative perception, with four synchronized robots, RTK-GPS ground truth, and dense semantic LiDAR labels across the CU Boulder campus.
 img: assets/projects/cu_multi/main_image.png
-card_img: assets/projects/cu_multi/main_campus_robot1_thumb.png
+card_img: assets/projects/cu_multi/main_campus_all_thumb.png
 hero: false
 category: Research · ARPG
 links:
@@ -13,9 +13,11 @@ links:
 ---
 
 {% include semantic_map.html
-   base="assets/projects/cu_multi/main_campus_robot1"
-   title="Main Campus · Robot 1"
-   caption="Semantic LiDAR map built from Robot 1's run on Main Campus. Scans are taken every 10 m along the ground-truth trajectory, downsampled to 1 m voxels, then merged and downsampled to 1 m again. Click a class to hide it." %}
+   dir="assets/projects/cu_multi/"
+   env="main_campus"
+   default="all"
+   title="Main Campus"
+   caption="Semantic LiDAR maps from the four robots on Main Campus. Pick one robot or all of them. Scans are taken every 10 m along each ground-truth trajectory, downsampled to 1 m voxels, then merged and downsampled to 1 m again. The axes show each lidar's pose (x red, y green, z blue), replayed in sync about 60× faster than real time. Click a class to hide it." %}
 
 ## Overview
 
